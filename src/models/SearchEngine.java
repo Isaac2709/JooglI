@@ -5,6 +5,8 @@
  */
 package models;
 
+import database.DBConnection;
+import java.sql.Connection;
 import java.util.ArrayList;
 
 /**
@@ -13,10 +15,20 @@ import java.util.ArrayList;
  */
 public class SearchEngine {
     private String search;
+    private Connection conn;
     
     public SearchEngine(){
-        
+        conn = new DBConnection().getConn();
     }
+
+    public Connection getConn() {
+        return conn;
+    }
+
+    public void setConn(Connection conn) {
+        this.conn = conn;
+    }
+        
 
     public SearchEngine(String search) {
         this.search = search;
