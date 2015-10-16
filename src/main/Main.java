@@ -5,6 +5,12 @@
  */
 package main;
 
+import controllers.SearchEngineController;
+import database.DBConnection;
+import java.sql.Connection;
+import models.Sites;
+import org.jsoup.Jsoup;
+
 /**
  *
  * @author isaac
@@ -16,6 +22,24 @@ public class Main {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+//        try{
+//            String result = new SearchEngineController().getContenidoHTML("http://facebook.com");            
+//            System.out.println(result); 
+//        }catch(Exception e){System.err.println("E: " + e);}
+        
+        views.SearchEngineView mainView = new views.SearchEngineView();
+        mainView.setVisible(true);
+        try{
+            //String result = new SearchEngineController().getContenidoHTML("http://billyprogramador.blogspot.com/2011/11/como-alterar-el-resultado-de-una.html");
+            
+            //System.out.println(Jsoup.parse(result).text()); 
+            //Connection conn = new DBConnection().getConn();
+            //Sites google = new Sites("BillyProgramador", "http://billyprogramador.blogspot.com/2011/11/como-alterar-el-resultado-de-una.html", null, null, null, null, null, null);
+            //google.registerSite(conn);
+        }
+        catch(Exception e){
+        
+        }
     }
     
 }
