@@ -45,10 +45,6 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
         jTxtSearch2 = new javax.swing.JTextField();
         jBtnSearch1 = new javax.swing.JButton();
         jPanelResult = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        tittle1 = new javax.swing.JLabel();
-        tags1 = new javax.swing.JLabel();
-        description1 = new javax.swing.JLabel();
         mainJPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTxtSearch = new javax.swing.JTextField();
@@ -75,41 +71,6 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
         });
 
         jPanelResult.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        tittle1.setText("Google");
-
-        tags1.setText("Buscador, Español");
-
-        description1.setText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasas adasdas                            asdas               asdas   asdsad sa sads dsad as ");
-        description1.setToolTipText("");
-        description1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        description1.setAutoscrolls(true);
-        description1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tittle1, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tags1, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(description1, javax.swing.GroupLayout.PREFERRED_SIZE, 432, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(tittle1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tags1)
-                .addGap(17, 17, 17)
-                .addComponent(description1, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE))
-        );
-
-        jPanelResult.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 480, 110));
 
         javax.swing.GroupLayout searchJPanelLayout = new javax.swing.GroupLayout(searchJPanel);
         searchJPanel.setLayout(searchJPanelLayout);
@@ -224,23 +185,30 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
 
     private void jBtnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnSearchActionPerformed
         ArrayList<Sites> listSites = searchEngine.search(jTxtSearch2.getText());
+        System.out.println("******************************************");
         searchEngine.printSites(listSites);
+        loadResults(listSites);
     }//GEN-LAST:event_jBtnSearchActionPerformed
 
     private void jTxtSearch2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTxtSearch2KeyPressed
         ArrayList<Sites> listSites = searchEngine.search(jTxtSearch2.getText());
         System.out.println("******************************************");
+        searchEngine.printSites(listSites);
         loadResults(listSites);
     }//GEN-LAST:event_jTxtSearch2KeyPressed
 
     private void jBtnSearch1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnSearch1ActionPerformed
         ArrayList<Sites> listSites = searchEngine.search(jTxtSearch2.getText());
+        System.out.println("******************************************");
         searchEngine.printSites(listSites);
+        loadResults(listSites);
     }//GEN-LAST:event_jBtnSearch1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-       ArrayList<Sites> listSites = searchEngine.search(jTxtSearch2.getText());
+        ArrayList<Sites> listSites = searchEngine.search(jTxtSearch2.getText());
+        System.out.println("******************************************");
         searchEngine.printSites(listSites);
+        loadResults(listSites);        
     }//GEN-LAST:event_jButton2ActionPerformed
     
     private void loadResults(ArrayList<Sites> listSites){
@@ -279,7 +247,7 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
                 .addComponent(jDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE))
             );
 
-            jPanelResult.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 480, 110));            
+            jPanelResult.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10+(i*110), 480, 110));
         }  
         pack();
         //jPanelResult.add(jPanel3);
@@ -393,20 +361,16 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel description1;
     private javax.swing.JButton jBtnSearch;
     private javax.swing.JButton jBtnSearch1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanelResult;
     private javax.swing.JTextField jTxtSearch;
     private javax.swing.JTextField jTxtSearch2;
     private javax.swing.JPanel mainJPanel;
     private javax.swing.JPanel searchJPanel;
-    private javax.swing.JLabel tags1;
-    private javax.swing.JLabel tittle1;
     // End of variables declaration//GEN-END:variables
 
     @Override
