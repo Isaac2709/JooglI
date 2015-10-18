@@ -6,9 +6,18 @@
 package views;
 
 import controllers.SearchEngineController;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.GroupLayout;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 import models.SearchEngine;
 import models.Sites;
 
@@ -44,6 +53,7 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
         jLabel2 = new javax.swing.JLabel();
         jTxtSearch2 = new javax.swing.JTextField();
         jBtnSearch1 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
         jPanelResult = new javax.swing.JPanel();
         mainJPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -71,6 +81,7 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
         });
 
         jPanelResult.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jScrollPane1.setViewportView(jPanelResult);
 
         javax.swing.GroupLayout searchJPanelLayout = new javax.swing.GroupLayout(searchJPanel);
         searchJPanel.setLayout(searchJPanelLayout);
@@ -83,23 +94,26 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTxtSearch2, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jBtnSearch1))
-                    .addComponent(jPanelResult, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jBtnSearch1)
+                        .addGap(0, 42, Short.MAX_VALUE))
+                    .addGroup(searchJPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1)))
+                .addContainerGap())
         );
         searchJPanelLayout.setVerticalGroup(
             searchJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(searchJPanelLayout.createSequentialGroup()
-                .addGroup(searchJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addGroup(searchJPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(searchJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTxtSearch2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jBtnSearch1))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanelResult, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(19, 19, 19))
+                .addContainerGap()
+                .addGroup(searchJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTxtSearch2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jBtnSearch1))
+                .addGap(19, 266, Short.MAX_VALUE))
+            .addGroup(searchJPanelLayout.createSequentialGroup()
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1)
+                .addContainerGap())
         );
 
         getContentPane().add(searchJPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 480, 300));
@@ -213,7 +227,9 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
     
     private void loadResults(ArrayList<Sites> listSites){
         jPanelResult.removeAll();
+        
         for(int i = 0; i < listSites.size(); i++){
+            JSeparator separator = new JSeparator();
             javax.swing.JLabel jTitle = new javax.swing.JLabel();
             javax.swing.JLabel jDescription = new javax.swing.JLabel();
             //jLabel3.setFont(new java.awt.Font("Tahoma", 2, 36)); // NOI18N
@@ -222,7 +238,6 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
             if(listSites.get(i).getBody().length() > 100){
                 jDescription.setText(listSites.get(i).getBody().substring(0, 100));
             }
-            
             javax.swing.JPanel jPanel3 = new javax.swing.JPanel();
             javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
             jPanel3.setLayout(jPanel3Layout);
@@ -234,7 +249,9 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
                         .addComponent(jTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
                     //.addComponent(tags, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 432, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(separator)
             );
             jPanel3Layout.setVerticalGroup(
                 jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -245,12 +262,12 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
                 //.addComponent(tags)
                     .addGap(17, 17, 17)
                 .addComponent(jDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE))
+                .addComponent(separator)
             );
-
             jPanelResult.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10+(i*110), 480, 110));
         }  
         pack();
-        //jPanelResult.add(jPanel3);
+       
     }
     
     private void annimationLogo() throws InterruptedException{        
@@ -367,6 +384,7 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanelResult;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTxtSearch;
     private javax.swing.JTextField jTxtSearch2;
     private javax.swing.JPanel mainJPanel;
