@@ -24,6 +24,7 @@ public class Main {
         // TODO code application logic here
 //        try{
 //            String result = new SearchEngineController().getContenidoHTML("http://facebook.com");            
+//            new SearchEngineController().openWebSite();
 //            System.out.println(result); 
 //        }catch(Exception e){System.err.println("E: " + e);}
         
