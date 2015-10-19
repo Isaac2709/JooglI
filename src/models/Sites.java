@@ -30,6 +30,7 @@ public class Sites {
     private String body;
     private String footer;
     private String summary;
+    private ArrayList<Token> listTokensMatches;
 
     public Sites() {
     }
@@ -162,6 +163,12 @@ public class Sites {
     public void setFooter(String footer) {
         this.footer = footer;
     }
-    
-    
+
+    public ArrayList<Token> getListTokensMatches() {
+        return listTokensMatches;
+    }
+
+    public void setListTokensMatches(ArrayList<Token> listTokensMatches) {
+        this.listTokensMatches = listTokensMatches;
+    }        
 }
