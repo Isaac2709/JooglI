@@ -9,8 +9,11 @@ import controllers.SearchEngineController;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import models.SearchEngine;
 import models.Sites;
+import models.Token;
 
 /**
  *
@@ -21,7 +24,7 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
     private Thread tempThreadLogo;
     private Thread tempThreadBtnSearch;
     private Thread tempThreadTxtSearch;
-    private boolean flag=false;
+    private boolean flag=false;    
     /**
      * Creates new form SearchEngineView
      */
@@ -29,6 +32,7 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
         initComponents(); 
         searchJPanel.setVisible(false);
         searchEngine.consultSites();
+        // Listen for changes in the text        
     }
 
     /**
@@ -85,7 +89,7 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jBtnSearch1))
                     .addComponent(jPanelResult, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(52, Short.MAX_VALUE))
         );
         searchJPanelLayout.setVerticalGroup(
             searchJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -98,7 +102,7 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
                             .addComponent(jTxtSearch2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jBtnSearch1))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanelResult, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanelResult, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
                 .addGap(19, 19, 19))
         );
 
@@ -180,7 +184,7 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
             catch(Exception e){
                 System.err.println("ERROR EN HILOS");
             }    
-        }
+        }        
     }//GEN-LAST:event_jTxtSearchKeyPressed
 
     private void jBtnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnSearchActionPerformed
@@ -190,13 +194,6 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
         loadResults(listSites);
     }//GEN-LAST:event_jBtnSearchActionPerformed
 
-    private void jTxtSearch2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTxtSearch2KeyPressed
-        ArrayList<Sites> listSites = searchEngine.search(jTxtSearch2.getText());
-        System.out.println("******************************************");
-        searchEngine.printSites(listSites);
-        loadResults(listSites);
-    }//GEN-LAST:event_jTxtSearch2KeyPressed
-
     private void jBtnSearch1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnSearch1ActionPerformed
         ArrayList<Sites> listSites = searchEngine.search(jTxtSearch2.getText());
         System.out.println("******************************************");
@@ -205,49 +202,61 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
     }//GEN-LAST:event_jBtnSearch1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        ArrayList<Sites> listSites = searchEngine.search(jTxtSearch2.getText());
+        /*ArrayList<Sites> listSites = searchEngine.search(jTxtSearch2.getText());
         System.out.println("******************************************");
         searchEngine.printSites(listSites);
-        loadResults(listSites);        
+        loadResults(listSites); */       
     }//GEN-LAST:event_jButton2ActionPerformed
-    
+
+    private void jTxtSearch2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTxtSearch2KeyPressed
+        ArrayList<Sites> listSites = searchEngine.search(jTxtSearch2.getText());
+        System.out.println("******************************************");
+        searchEngine.printSites(listSites);        
+        loadResults(listSites);        
+    }//GEN-LAST:event_jTxtSearch2KeyPressed
+           
     private void loadResults(ArrayList<Sites> listSites){
         jPanelResult.removeAll();
         for(int i = 0; i < listSites.size(); i++){
             javax.swing.JLabel jTitle = new javax.swing.JLabel();
             javax.swing.JLabel jDescription = new javax.swing.JLabel();
+            javax.swing.JLabel jMatches = new javax.swing.JLabel();
             //jLabel3.setFont(new java.awt.Font("Tahoma", 2, 36)); // NOI18N
             jTitle.setText(listSites.get(i).getTitle());
             jDescription.setText(listSites.get(i).getBody());
+            ArrayList<Token> listTokenMatches = listSites.get(i).getListTokensMatches();
+            String matches = "";
+            for(int n = 0; n < listTokenMatches.size(); n++){
+                matches = matches + listTokenMatches.get(n).getToken() + " aparecio " + listTokenMatches.get(n).getNumberMatches() + " veces; ";
+            }
+            jMatches.setText(matches);
             if(listSites.get(i).getBody().length() > 100){
                 jDescription.setText(listSites.get(i).getBody().substring(0, 100));
-            }
-            
-            javax.swing.JPanel jPanel3 = new javax.swing.JPanel();
-            javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-            jPanel3.setLayout(jPanel3Layout);
-            jPanel3Layout.setHorizontalGroup(
-                jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel3Layout.createSequentialGroup()
+            }            
+            javax.swing.JPanel jPanel = new javax.swing.JPanel();
+            javax.swing.GroupLayout jPanelLayout = new javax.swing.GroupLayout(jPanel);
+            jPanel.setLayout(jPanelLayout);
+            jPanelLayout.setHorizontalGroup(
+                jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanelLayout.createSequentialGroup()
                     .addGap(18, 18, 18)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    //.addComponent(tags, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jMatches, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 432, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             );
-            jPanel3Layout.setVerticalGroup(
-                jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel3Layout.createSequentialGroup()
+            jPanelLayout.setVerticalGroup(
+                jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanelLayout.createSequentialGroup()
                     .addGap(20, 20, 20)
                     .addComponent(jTitle)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                //.addComponent(tags)
+                    .addComponent(jMatches)                    
                     .addGap(17, 17, 17)
                 .addComponent(jDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE))
             );
-
-            jPanelResult.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10+(i*110), 480, 110));
+            jPanelResult.add(jPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10+(i*110), 480, 110));
         }  
         pack();
         //jPanelResult.add(jPanel3);
@@ -373,6 +382,7 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
     private javax.swing.JPanel searchJPanel;
     // End of variables declaration//GEN-END:variables
 
+    
     @Override
     public void run() {        
         Thread ct = Thread.currentThread();
@@ -401,11 +411,6 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
                 Logger.getLogger(SearchEngineView.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-//        if(flag){
-//            System.out.println("as");
-//            jLabel1.setLocation(0,0);
-//            jTextField1.setLocation(120,20);
-//        }
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
