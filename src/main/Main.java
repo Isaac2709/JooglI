@@ -9,7 +9,6 @@ import controllers.SearchEngineController;
 import database.DBConnection;
 import java.sql.Connection;
 import models.Sites;
-import org.jsoup.Jsoup;
 
 /**
  *
