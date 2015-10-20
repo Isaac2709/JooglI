@@ -16,7 +16,7 @@ import org.jsoup.Jsoup;
  * @author isaac
  */
 public class Main {
-
+    private static SearchEngineController searchEngine = new SearchEngineController();
     /**
      * @param args the command line arguments
      */
@@ -27,9 +27,11 @@ public class Main {
 //            new SearchEngineController().openWebSite();
 //            System.out.println(result); 
 //        }catch(Exception e){System.err.println("E: " + e);}
-        
-        views.SearchEngineView mainView = new views.SearchEngineView();
-        mainView.setVisible(true);
+        searchEngine.consultSites();
+        //views.SearchEngineView mainView = new views.SearchEngineView();
+        //mainView.setVisible(true);
+        views.SitesView sitesView = new views.SitesView(searchEngine);
+        sitesView.setVisible(true);
         try{
             //String result = new SearchEngineController().getContenidoHTML("http://billyprogramador.blogspot.com/2011/11/como-alterar-el-resultado-de-una.html");
             

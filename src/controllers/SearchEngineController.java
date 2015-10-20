@@ -141,4 +141,22 @@ public class SearchEngineController {
             System.out.println("Body: " + listSites.get(i).getBody());
         }
     }
+
+    public ArrayList<Sites> getListSites() {
+        return listSites;
+    }
+
+    public void setListSites(ArrayList<Sites> listSites) {
+        this.listSites = listSites;
+    }
+
+    public static Connection getConn() {
+        return conn;
+    }
+
+    public static void setConn(Connection conn) {
+        SearchEngineController.conn = conn;
+    }
+    
+    
 }
