@@ -28,10 +28,10 @@ public class Main {
 //            System.out.println(result); 
 //        }catch(Exception e){System.err.println("E: " + e);}
         searchEngine.consultSites();
-        //views.SearchEngineView mainView = new views.SearchEngineView();
-        //mainView.setVisible(true);
-        views.SitesView sitesView = new views.SitesView(searchEngine);
-        sitesView.setVisible(true);
+        views.SearchEngineView mainView = new views.SearchEngineView();
+        mainView.setVisible(true);
+        //views.SitesView sitesView = new views.SitesView(searchEngine);
+        //sitesView.setVisible(true);
         try{
             //String result = new SearchEngineController().getContenidoHTML("http://billyprogramador.blogspot.com/2011/11/como-alterar-el-resultado-de-una.html");
             
