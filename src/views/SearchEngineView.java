@@ -242,10 +242,10 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jTxtSearch2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTxtSearch2KeyPressed
-        ArrayList<Sites> listSites = searchEngine.search(jTxtSearch2.getText());
+        /*ArrayList<Sites> listSites = searchEngine.search(jTxtSearch2.getText());
         System.out.println("******************************************");
         searchEngine.printSites(listSites);        
-        loadResults(listSites);        
+        loadResults(listSites);        */
     }//GEN-LAST:event_jTxtSearch2KeyPressed
            
     private void loadResults(ArrayList<Sites> listSites){
