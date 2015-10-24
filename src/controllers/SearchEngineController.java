@@ -77,6 +77,7 @@ public class SearchEngineController {
                                 match = false;
                                 break;
                             }
+                            tempN++;
                         }
                         if(match){
                             numberMatches++;
@@ -96,7 +97,8 @@ public class SearchEngineController {
                 else{
                     listMatchingBody.add(listSites.get(i));
                 }
-            }                
+            }
+            matchingTitle = false;
         }
         ArrayList<Sites> listMatching = new ArrayList<>();
         listMatching.addAll(listMatchingTittles);
