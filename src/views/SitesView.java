@@ -7,6 +7,11 @@ package views;
 
 import controllers.SearchEngineController;
 import java.util.ArrayList;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
 /**
  *
@@ -14,15 +19,41 @@ import java.util.ArrayList;
  */
 public class SitesView extends javax.swing.JFrame {    
     SearchEngineController searchEngine;
+    ListSelectionModel listSelectionModel;
     /**
      * Creates new form ConfigSitesView
      */
     public SitesView(SearchEngineController searchEngine) {
-        initComponents();        
+        initComponents();  
+        //listSelectionModel = jTable1.getSelectionModel();        
         //jTable1.setModel(model);        
         this.searchEngine = searchEngine;
-        searchEngine.printSites(searchEngine.getListSites());
+        //searchEngine.printSites(searchEngine.getListSites());
         loadTable();
+        
+        model.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent evt) {
+              // UPDATE SQL into MDBas
+                if(evt.getColumn()!=-1){
+                    //model.getValueAt(evt.getFirstRow(), evt.getColumn());
+                   if(model.getValueAt(evt.getFirstRow(), evt.getColumn())!= null){
+                        if(evt.getColumn() == 1){
+                            if( !(model.getValueAt(evt.getFirstRow(), evt.getColumn()).toString().equals("")) && !(model.getValueAt(evt.getFirstRow(), evt.getColumn() - 1).toString().equals("")) ){
+                                //UPDATE
+                                System.out.println("2");
+                            }
+                        }
+                        else if(evt.getColumn() == 0){
+                            if( !(model.getValueAt(evt.getFirstRow(), evt.getColumn()).toString().equals("")) && !(model.getValueAt(evt.getFirstRow(), evt.getColumn() + 1).toString().equals("")) ){
+                                System.out.println("2");
+                            }
+                       }
+                   }
+                    //System.out.println(model.getValueAt(evt.getFirstRow(), evt.getColumn()) + " | Column: " + evt.getColumn()+" | Row: " + evt.getFirstRow() + " | Type: "+evt.getType());
+                }                
+            }
+        });
     }
     
     private void loadTable(){
@@ -52,15 +83,35 @@ public class SitesView extends javax.swing.JFrame {
             }
         );
         jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        jBtnAdd = new javax.swing.JButton();
+        jBtnDelete = new javax.swing.JButton();
+        jBtnSave = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(800, 600));
 
         jTable1.setModel(model);
         jScrollPane1.setViewportView(jTable1);
 
-        jButton1.setText("+");
+        jBtnAdd.setText("+");
+        jBtnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnAddActionPerformed(evt);
+            }
+        });
+
+        jBtnDelete.setText("-");
+        jBtnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnDeleteActionPerformed(evt);
+            }
+        });
+
+        jBtnSave.setText("s");
+        jBtnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnSaveActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -69,20 +120,45 @@ public class SitesView extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 645, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
-                .addContainerGap(108, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jBtnAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jBtnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jBtnSave, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1)
+                .addComponent(jBtnAdd)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jBtnDelete)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jBtnSave)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jBtnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAddActionPerformed
+       
+        Object []obj = new Object[2];
+        //for(int i = 0; i < listSites.size(); i++){
+            obj[0] = null;
+            obj[1] = null;
+            model.addRow(obj);
+        //}
+    }//GEN-LAST:event_jBtnAddActionPerformed
+
+    private void jBtnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnDeleteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jBtnDeleteActionPerformed
+
+    private void jBtnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnSaveActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jBtnSaveActionPerformed
 
     /**
      * @param args the command line arguments
@@ -119,9 +195,17 @@ public class SitesView extends javax.swing.JFrame {
             }
         });
     }
+    
+    /*class SharedListSelectionHandler implements ListSelectionListener {
+        public void valueChanged(ListSelectionEvent e) { 
+            System.out.print("CHANGE");
+        }
+    }*/
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jBtnAdd;
+    private javax.swing.JButton jBtnDelete;
+    private javax.swing.JButton jBtnSave;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
