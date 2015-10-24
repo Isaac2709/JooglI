@@ -12,6 +12,7 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BorderFactory;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.GroupLayout;
@@ -250,25 +251,42 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
            
     private void loadResults(ArrayList<Sites> listSites){
         jPanelResult.removeAll();
+        int countForVerticalPanelSize =0;
+        int countForVerticalPanelSize2 =0;
+        boolean verificarCount=false;
         
         for(int i = 0; i < listSites.size(); i++){
+            countForVerticalPanelSize=0;
             JSeparator separator = new JSeparator();
-            javax.swing.JLabel jTitle = new javax.swing.JLabel();
+            //javax.swing.JLabel jTitle = new javax.swing.JLabel();
             javax.swing.JLabel jDescription = new javax.swing.JLabel();
             javax.swing.JLabel jMatches = new javax.swing.JLabel();
+            
+            javax.swing.JLabel jtimeFirstMatch = new javax.swing.JLabel();
             //jLabel3.setFont(new java.awt.Font("Tahoma", 2, 36)); // NOI18N
-            jTitle.setText(listSites.get(i).getTitle());
+            //jTitle.setText(listSites.get(i).getTitle());
             jDescription.setText(listSites.get(i).getBody());
             ArrayList<Token> listTokenMatches = listSites.get(i).getListTokensMatches();
             String matches = "";
             for(int n = 0; n < listTokenMatches.size(); n++){
-                matches = matches + listTokenMatches.get(n).getToken() + " aparecio " + listTokenMatches.get(n).getNumberMatches() + " veces; ";
+                matches = "<html><body>"+matches + listTokenMatches.get(n).getToken() + " aparecio " + listTokenMatches.get(n).getNumberMatches() + " veces; <br> Tiempo de primera coincidencia: "+ listTokenMatches.get(n).getFirstMatchTime()+" milisegundos. <br> Tiempo total: "+listTokenMatches.get(n).getTotalMachTime()+" milisegundos.<br><html><body>";
+                countForVerticalPanelSize++;
             }
+            if(!verificarCount){
+                countForVerticalPanelSize2=countForVerticalPanelSize;
+                verificarCount=true;
+            }
+            if(verificarCount && countForVerticalPanelSize>countForVerticalPanelSize2){
+                countForVerticalPanelSize2=countForVerticalPanelSize;
+            }
+                
+                
             jMatches.setText(matches);
-            if(listSites.get(i).getBody().length() > 100){
-                jDescription.setText(listSites.get(i).getBody().substring(0, 100));
+            if(listSites.get(i).getBody().length() > 50){
+                jDescription.setText(listSites.get(i).getBody().substring(0, 50));
             }            
             javax.swing.JPanel jPanel = new javax.swing.JPanel();
+            jPanel.setBorder(BorderFactory.createTitledBorder(listSites.get(i).getTitle()));
             javax.swing.GroupLayout jPanelLayout = new javax.swing.GroupLayout(jPanel);
             jPanel.setLayout(jPanelLayout);
             jPanelLayout.setHorizontalGroup(
@@ -276,26 +294,37 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
                 .addGroup(jPanelLayout.createSequentialGroup()
                     .addGap(18, 18, 18)
                     .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jMatches, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 432, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        //.addComponent(jTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jMatches)
+                        .addComponent(jDescription)
+                    )
                         
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(separator)
+                    //.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                )
+                   // .addComponent(separator)
             );
             jPanelLayout.setVerticalGroup(
                 jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanelLayout.createSequentialGroup()
-                    .addGap(20, 20, 20)
-                    .addComponent(jTitle)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jMatches)                    
-                    .addGap(17, 17, 17)
-                .addComponent(jDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE))
-                .addComponent(separator)
+                    .addGap(10, 10, 10)
+                    //.addComponent(jTitle)
+                    //.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jMatches) 
+                    .addComponent(jDescription)
+                    //.addGap(17, 17, 17)
+                
+                )
+                //.addComponent(separator)
             );
-            jPanelResult.add(jPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10+(i*110), 480, 110));
-
+            int boxSize=0;
+            int numMult=35;
+            if(countForVerticalPanelSize2>1){
+                numMult=numMult+(countForVerticalPanelSize2*3);
+                boxSize=countForVerticalPanelSize2*numMult;
+            }
+            
+            jPanelResult.add(jPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, (i*(80+boxSize)), 480, boxSize+80));
+            
         }  
         pack();
        
