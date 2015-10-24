@@ -9,10 +9,13 @@ import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.sql.Connection;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -20,6 +23,7 @@ import java.util.regex.Pattern;
 import models.SearchEngine;
 import models.Sites;
 import models.Token;
+import org.jsoup.Jsoup;
 
 /**
  *
@@ -34,13 +38,24 @@ public class SearchEngineController {
     }
     
     public ArrayList<Sites> search(String strSearch){
+        //time variables sequential mode
+        BigInteger  timeFirstMatchPerSite= BigInteger.valueOf(0); 
+        BigInteger timeTotalMatchPerSite, timeTotal;
+        long timeStart;
+        boolean firstMatch=false;
+        
         ArrayList<Sites> listMatchingTittles = new ArrayList<>();
-        ArrayList<Sites> listMatchingBody = new ArrayList<>();        
+        ArrayList<Sites> listMatchingBody = new ArrayList<>();  
+        
+        timeStart=System.currentTimeMillis();
+        System.out.println("Time of first match "+timeStart+" milliseconds");
         for(int i = 0; i < listSites.size(); i++){
             boolean matchingTitle = false;
+            boolean matchingBody = false;
+            
             StringTokenizer tokens = new StringTokenizer(strSearch);
             ArrayList<Token> listTokensMatches = new ArrayList<Token>();
-            int intMatch = 0;
+            //int intMatch = 0;
             Token currentToken = null;
             while(tokens.hasMoreTokens()){                
                 int numberMatches = 0;
@@ -59,6 +74,15 @@ public class SearchEngineController {
                         }
                         if(match){
                             numberMatches++;
+                            if(!firstMatch){
+                                firstMatch=true;
+                                //long a = System.currentTimeMillis();
+                                //DecimalFormat df= new DecimalFormat("000");
+                                //System.out.println("T "+a);
+                                timeFirstMatchPerSite=BigInteger.valueOf(System.currentTimeMillis());
+                                timeFirstMatchPerSite=timeFirstMatchPerSite.subtract(BigInteger.valueOf(timeStart));
+                                System.out.println("Time of first match "+timeFirstMatchPerSite+" milliseconds");
+                            }
                         }
                     }
                 }
@@ -79,12 +103,23 @@ public class SearchEngineController {
                         }
                         if(match){
                             numberMatches++;
+                            if(!firstMatch){
+                                firstMatch=true;
+                                timeFirstMatchPerSite=BigInteger.valueOf(System.currentTimeMillis());
+                                timeFirstMatchPerSite=timeFirstMatchPerSite.subtract(BigInteger.valueOf(timeStart));
+                                System.out.println("Time of first match "+timeFirstMatchPerSite+" milliseconds");
+                            }
                         }
                     }
                 }
+                timeTotalMatchPerSite=BigInteger.valueOf(System.currentTimeMillis());
+                timeTotalMatchPerSite=timeTotalMatchPerSite.subtract(BigInteger.valueOf(timeStart));
+                System.out.println("Time of first match "+timeTotalMatchPerSite+" milliseconds");
+                
                 // If exist more than zero matches of token, it added to list tokens match list
                 if(numberMatches > 0){
-                    listTokensMatches.add(new Token(token, numberMatches));
+                    //matchingBody = true;
+                    listTokensMatches.add(new Token(token, numberMatches, timeFirstMatchPerSite,timeTotalMatchPerSite));
                 }
             }
             if(!listTokensMatches.isEmpty()){
@@ -95,8 +130,11 @@ public class SearchEngineController {
                 else{
                     listMatchingBody.add(listSites.get(i));
                 }
-            }                
+            }
+
         }
+        
+        
         ArrayList<Sites> listMatching = new ArrayList<>();
         listMatching.addAll(listMatchingTittles);
         listMatching.addAll(listMatchingBody);        

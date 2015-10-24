@@ -5,6 +5,8 @@
  */
 package models;
 
+import java.math.BigInteger;
+
 /**
  *
  * @author isaac
@@ -12,20 +14,22 @@ package models;
 public class Token {
     private String token;
     private int numberMatches;
-    private long firstMatchTime;
-    private long totalMatchTime;
+    private BigInteger firstMatchTime;
+    private BigInteger totalMatchTime;
 
     public Token(String token, int numberMatches) {
         this.token = token;
         this.numberMatches = numberMatches;
     }
     
-    public Token(String token, int numberMatches, long firstMatchTime, long totalMatchTime) {
+    public Token(String token, int numberMatches, BigInteger firstMatchTime, BigInteger totalMatchTime) {
         this.token = token;
         this.numberMatches = numberMatches;
         this.firstMatchTime=firstMatchTime;
         this.totalMatchTime=totalMatchTime;
     }
+    
+   
 
     public String getToken() {
         return token;
@@ -43,19 +47,19 @@ public class Token {
         this.numberMatches = numberMatches;
     }
 
-    public long getFirstMatchTime() {
+    public BigInteger getFirstMatchTime() {
         return firstMatchTime;
     }
 
-    public void setFirstMatchTime(long firstMatchTime) {
+    public void setFirstMatchTime(BigInteger firstMatchTime) {
         this.firstMatchTime = firstMatchTime;
     }
 
-    public long getTotalMachTime() {
+    public BigInteger getTotalMachTime() {
         return totalMatchTime;
     }
 
-    public void setTotalMachTime(long totalMachTime) {
+    public void setTotalMachTime(BigInteger totalMachTime) {
         this.totalMatchTime = totalMachTime;
     }
      
