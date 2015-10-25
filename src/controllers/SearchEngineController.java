@@ -32,6 +32,7 @@ import org.jsoup.Jsoup;
 public class SearchEngineController {
     private ArrayList<Sites> listSites;
     private static Connection conn;
+    private BigInteger timeTotalSequential;
     
     public SearchEngineController(){
         conn = new SearchEngine().getConn();
@@ -134,7 +135,8 @@ public class SearchEngineController {
 
         }
         
-        
+        setTimeTotalSequential(BigInteger.valueOf(System.currentTimeMillis()));
+        setTimeTotalSequential(timeTotalSequential.subtract(BigInteger.valueOf(timeStart)));
         ArrayList<Sites> listMatching = new ArrayList<>();
         listMatching.addAll(listMatchingTittles);
         listMatching.addAll(listMatchingBody);        
@@ -194,6 +196,16 @@ public class SearchEngineController {
     public static void setConn(Connection conn) {
         SearchEngineController.conn = conn;
     }
+
+    public BigInteger getTimeTotalSequential() {
+        return timeTotalSequential;
+    }
+
+    public void setTimeTotalSequential(BigInteger timeTotalSequential) {
+        this.timeTotalSequential = timeTotalSequential;
+    }
+    
+    
     
     
 }

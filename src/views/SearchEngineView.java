@@ -60,6 +60,7 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
         jBtnSearch1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanelResult = new javax.swing.JPanel();
+        jTimeTotalDurationSequential = new javax.swing.JLabel();
         mainJPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTxtSearch = new javax.swing.JTextField();
@@ -93,54 +94,40 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
         searchJPanelLayout.setHorizontalGroup(
             searchJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(searchJPanelLayout.createSequentialGroup()
-                .addGroup(searchJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(searchJPanelLayout.createSequentialGroup()
+                .addGroup(searchJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, searchJPanelLayout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTxtSearch2, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-/*<<<<<<< HEAD
-                        .addComponent(jBtnSearch1))
-                    .addComponent(jPanelResult, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(52, Short.MAX_VALUE))
-=======*/
                         .addComponent(jBtnSearch1)
-                        .addGap(0, 42, Short.MAX_VALUE))
-                    .addGroup(searchJPanelLayout.createSequentialGroup()
+                        .addGap(0, 18, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, searchJPanelLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane1)))
-                .addContainerGap())
-//>>>>>>> 3f40b67e5372e4b04757434381b2c72f5ef51f2c
+                        .addGroup(searchJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jTimeTotalDurationSequential, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING))))
+                .addGap(29, 29, 29))
         );
         searchJPanelLayout.setVerticalGroup(
             searchJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(searchJPanelLayout.createSequentialGroup()
-/*<<<<<<< HEAD
                 .addGroup(searchJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
                     .addGroup(searchJPanelLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(searchJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jTxtSearch2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jBtnSearch1))))
+                            .addComponent(jBtnSearch1)))
+                    .addGroup(searchJPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanelResult, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
-                .addGap(19, 19, 19))
-=======*/
-                .addContainerGap()
-                .addGroup(searchJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTxtSearch2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBtnSearch1))
-                .addGap(19, 266, Short.MAX_VALUE))
-            .addGroup(searchJPanelLayout.createSequentialGroup()
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1)
+                .addComponent(jTimeTotalDurationSequential, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
                 .addContainerGap())
-//>>>>>>> 3f40b67e5372e4b04757434381b2c72f5ef51f2c
         );
 
-        getContentPane().add(searchJPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 480, 300));
+        getContentPane().add(searchJPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 480, 330));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 2, 36)); // NOI18N
         jLabel1.setText("JooglI");
@@ -187,7 +174,7 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
         mainJPanelLayout.setVerticalGroup(
             mainJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainJPanelLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(0, 77, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(26, 26, 26)
                 .addComponent(jTxtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -195,7 +182,7 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
                 .addGroup(mainJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jBtnSearch)
                     .addComponent(jButton2))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 78, Short.MAX_VALUE))
         );
 
         getContentPane().add(mainJPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 480, 300));
@@ -255,16 +242,16 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
         int countForVerticalPanelSize2 =0;
         boolean verificarCount=false;
         
+        //javax.swing.JLabel jTotalSequentialDuration = new javax.swing.JLabel();
+        
+       
         for(int i = 0; i < listSites.size(); i++){
             countForVerticalPanelSize=0;
-            JSeparator separator = new JSeparator();
-            //javax.swing.JLabel jTitle = new javax.swing.JLabel();
+            
             javax.swing.JLabel jDescription = new javax.swing.JLabel();
             javax.swing.JLabel jMatches = new javax.swing.JLabel();
             
             javax.swing.JLabel jtimeFirstMatch = new javax.swing.JLabel();
-            //jLabel3.setFont(new java.awt.Font("Tahoma", 2, 36)); // NOI18N
-            //jTitle.setText(listSites.get(i).getTitle());
             jDescription.setText(listSites.get(i).getBody());
             ArrayList<Token> listTokenMatches = listSites.get(i).getListTokensMatches();
             String matches = "";
@@ -279,8 +266,6 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
             if(verificarCount && countForVerticalPanelSize>countForVerticalPanelSize2){
                 countForVerticalPanelSize2=countForVerticalPanelSize;
             }
-                
-                
             jMatches.setText(matches);
             if(listSites.get(i).getBody().length() > 50){
                 jDescription.setText(listSites.get(i).getBody().substring(0, 50));
@@ -294,27 +279,18 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
                 .addGroup(jPanelLayout.createSequentialGroup()
                     .addGap(18, 18, 18)
                     .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        //.addComponent(jTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jMatches)
                         .addComponent(jDescription)
                     )
-                        
-                    //.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 )
-                   // .addComponent(separator)
             );
             jPanelLayout.setVerticalGroup(
                 jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanelLayout.createSequentialGroup()
                     .addGap(10, 10, 10)
-                    //.addComponent(jTitle)
-                    //.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(jMatches) 
                     .addComponent(jDescription)
-                    //.addGap(17, 17, 17)
-                
                 )
-                //.addComponent(separator)
             );
             int boxSize=0;
             int numMult=35;
@@ -325,7 +301,11 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
             
             jPanelResult.add(jPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, (i*(80+boxSize)), 480, boxSize+80));
             
+            
         }  
+        //searchJPanel.add(jTotalSequentialDuration.setText())
+        jTimeTotalDurationSequential.setText("Tiempo total secuencial: "+searchEngine.getTimeTotalSequential().toString()+" milisegundos.");
+        searchJPanel.add(jTimeTotalDurationSequential);
         pack();
        
     }
@@ -445,6 +425,7 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanelResult;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel jTimeTotalDurationSequential;
     private javax.swing.JTextField jTxtSearch;
     private javax.swing.JTextField jTxtSearch2;
     private javax.swing.JPanel mainJPanel;
