@@ -348,10 +348,10 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
                 boxSize=countForVerticalPanelSize2*numMult;
             }
             
-            jPanelResult.add(jPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, (i*(100+boxSize)), 480, boxSize+100));                        
+            jPanelResult.add(jPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, (i*(110+boxSize)), 480, boxSize+110));                        
         }  
         //searchJPanel.add(jTotalSequentialDuration.setText())
-        //jTimeTotalDurationSequential.setText("Tiempo total secuencial: "+searchEngine.getTimeTotalSequential().toString()+" milisegundos.");
+        jTimeTotalDurationSequential.setText("Tiempo total secuencial: "+searchEngine.getTimeTotalSequential().toString()+" milisegundos.");
         //searchJPanel.add(jTimeTotalDurationSequential);
         pack();       
     }
