@@ -56,13 +56,13 @@ public class SearchEngineController {
         timeStart=System.currentTimeMillis();
         System.out.println("Time of first match "+timeStart+" milliseconds");
         long startTimeSite = System.currentTimeMillis();
-        if(implementsMultiCore){                
+        if(implementsMultiCore){  
+            System.err.println("MULTI");
             index = 0;
             ParallelTasks tasks = new ParallelTasks();
             
             for(int i = 0; i < listSites.size(); i++){
-                //index = i;                
-                System.out.println("1Index " + index);
+                //index = i;                                
                 tasks.add(new Runnable() {
                     public void run()
                     {
@@ -98,7 +98,8 @@ public class SearchEngineController {
             tasks.go();
             System.err.println(System.currentTimeMillis() - start);
         }
-        else{                    
+        else{      
+            System.err.println("UNI");
             for(int i = 0; i < listSites.size(); i++){
                 startTimeSite = System.currentTimeMillis();
                 boolean matchingTitle = searchByWebSite(listSites.get(i), strSearch);
@@ -114,16 +115,15 @@ public class SearchEngineController {
                 timeTotalMatchPerSite=BigInteger.valueOf(System.currentTimeMillis());
                 timeTotalMatchPerSite=timeTotalMatchPerSite.subtract(BigInteger.valueOf(startTimeSite));
                 listSites.get(i).setTimeTotalMatchPerSite(timeTotalMatchPerSite);
-            }
-            System.err.println(System.currentTimeMillis() - timeStart);    
-            setTimeTotalSequential(BigInteger.valueOf(System.currentTimeMillis()));
-            setTimeTotalSequential(timeTotalSequential.subtract(BigInteger.valueOf(timeStart)));
+            }            
         }
-        
-        
+        System.err.println(System.currentTimeMillis() - timeStart);    
+        setTimeTotalSequential(BigInteger.valueOf(System.currentTimeMillis()));
+        setTimeTotalSequential(timeTotalSequential.subtract(BigInteger.valueOf(timeStart)));                
         ArrayList<Sites> listMatching = new ArrayList<>();
         listMatching.addAll(listMatchingTittles);
-        listMatching.addAll(listMatchingBody);        
+        listMatching.addAll(listMatchingBody);   
+        index = 0;
         return listMatching;
     }
     
