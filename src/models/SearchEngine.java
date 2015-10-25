@@ -16,9 +16,11 @@ import java.util.ArrayList;
 public class SearchEngine {
     private String search;
     private Connection conn;
+    private int availableProcessors;
     
     public SearchEngine(){
         conn = new DBConnection().getConn();
+         availableProcessors = Runtime.getRuntime().availableProcessors();
     }
 
     public Connection getConn() {
