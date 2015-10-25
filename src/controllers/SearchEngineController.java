@@ -9,10 +9,13 @@ import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.sql.Connection;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -31,6 +34,7 @@ public class SearchEngineController {
     private ArrayList<Sites> listSites;
     private static Connection conn;
     private static int index;
+    private BigInteger timeTotalSequential;
     
     public SearchEngineController(){
         conn = new SearchEngine().getConn();
@@ -38,13 +42,19 @@ public class SearchEngineController {
     }
     
     public ArrayList<Sites> search(String strSearch, boolean implementsMultiCore) throws InterruptedException{
+        //time variables sequential mode        
+        BigInteger timeTotalMatchPerSite, timeTotal;
+        long timeStart;
         ArrayList<Sites> listMatchingTittles = new ArrayList<>();
         ArrayList<Sites> listMatchingBody = new ArrayList<>();                
         
+        timeStart=System.currentTimeMillis();
+        System.out.println("Time of first match "+timeStart+" milliseconds");
+        long startTimeSite = System.currentTimeMillis();
         if(implementsMultiCore){                
             index = 0;
             ParallelTasks tasks = new ParallelTasks();
-            final Runnable waitOneSecond = new Runnable() {
+            /*final Runnable waitOneSecond = new Runnable() {
                 public void run()
                 {
                     try
@@ -66,7 +76,7 @@ public class SearchEngineController {
                     {
                     }
                 }
-            };
+            };*/
             for(int i = 0; i < listSites.size(); i++){
                 //index = i;                
                 System.out.println("1Index " + index);
@@ -99,9 +109,9 @@ public class SearchEngineController {
             tasks.go();
             System.err.println(System.currentTimeMillis() - start);
         }
-        else{        
-            final long start = System.currentTimeMillis();
+        else{                    
             for(int i = 0; i < listSites.size(); i++){
+                startTimeSite = System.currentTimeMillis();
                 boolean matchingTitle = searchByWebSite(listSites.get(i), strSearch);
                 if((listSites.get(i).getListTokensMatches()!=null) && (!listSites.get(i).getListTokensMatches().isEmpty())){
                     if(matchingTitle){
@@ -112,9 +122,15 @@ public class SearchEngineController {
                     }
                 }
                 matchingTitle = false;
+                timeTotalMatchPerSite=BigInteger.valueOf(System.currentTimeMillis());
+                timeTotalMatchPerSite=timeTotalMatchPerSite.subtract(BigInteger.valueOf(startTimeSite));
+                listSites.get(i).setTimeTotalMatchPerSite(timeTotalMatchPerSite);
             }
-            System.err.println(System.currentTimeMillis() - start);
+            System.err.println(System.currentTimeMillis() - timeStart);            
         }
+        
+        setTimeTotalSequential(BigInteger.valueOf(System.currentTimeMillis()));
+        setTimeTotalSequential(timeTotalSequential.subtract(BigInteger.valueOf(timeStart)));
         ArrayList<Sites> listMatching = new ArrayList<>();
         listMatching.addAll(listMatchingTittles);
         listMatching.addAll(listMatchingBody);        
@@ -122,13 +138,19 @@ public class SearchEngineController {
     }
     
     private boolean searchByWebSite(Sites webSiteToSearch, String strSearch){
-        boolean matchingTitle = false;
+        boolean matchingTitle = false; boolean firstMatch=false;
+        BigInteger  timeFirstMatchPerSite = BigInteger.valueOf(0); 
+        BigInteger  totalMatchTime = BigInteger.valueOf(0);         
         webSiteToSearch.setListTokensMatches(null);
         StringTokenizer tokens = new StringTokenizer(strSearch);
         ArrayList<Token> listTokensMatches = new ArrayList<Token>();
         int intMatch = 0;
         Token currentToken = null;
-        while(tokens.hasMoreTokens()){                
+        long timeStart = System.currentTimeMillis();
+        while(tokens.hasMoreTokens()){ 
+            firstMatch=false;
+            long timeStartForToken = System.currentTimeMillis();
+            
             int numberMatches = 0;
             String token = tokens.nextToken();
             // Compare the tokens with the title of the web-site
@@ -145,6 +167,15 @@ public class SearchEngineController {
                     }
                     if(match){
                         numberMatches++;
+                        if(!firstMatch){
+                            firstMatch=true;
+                            //long a = System.currentTimeMillis();
+                            //DecimalFormat df= new DecimalFormat("000");
+                            //System.out.println("T "+a);
+                            timeFirstMatchPerSite=BigInteger.valueOf(System.currentTimeMillis());
+                            timeFirstMatchPerSite=timeFirstMatchPerSite.subtract(BigInteger.valueOf(timeStartForToken));
+                            System.out.println("Time of first match "+timeFirstMatchPerSite+" milliseconds");
+                        }
                     }
                 }
             }
@@ -171,9 +202,14 @@ public class SearchEngineController {
             }
             // If exist more than zero matches of token, it added to list tokens match list
             if(numberMatches > 0){
-                listTokensMatches.add(new Token(token, numberMatches));
+                totalMatchTime=BigInteger.valueOf(System.currentTimeMillis());
+                totalMatchTime=totalMatchTime.subtract(BigInteger.valueOf(timeStart));
+                System.out.println("Time of first match "+totalMatchTime+" milliseconds");
+                listTokensMatches.add(new Token(token, numberMatches, timeFirstMatchPerSite, totalMatchTime));
             }
         }
+        
+        
         if(!listTokensMatches.isEmpty()){
             webSiteToSearch.setListTokensMatches(listTokensMatches);
         }
@@ -233,6 +269,16 @@ public class SearchEngineController {
     public static void setConn(Connection conn) {
         SearchEngineController.conn = conn;
     }
+
+    public BigInteger getTimeTotalSequential() {
+        return timeTotalSequential;
+    }
+
+    public void setTimeTotalSequential(BigInteger timeTotalSequential) {
+        this.timeTotalSequential = timeTotalSequential;
+    }
+    
+    
     
     
 }

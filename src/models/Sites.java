@@ -8,6 +8,7 @@ package models;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLConnection;
 import java.sql.Connection;
@@ -31,6 +32,7 @@ public class Sites {
     private String footer;
     private String summary;
     private ArrayList<Token> listTokensMatches;
+    private BigInteger timeTotalMatchPerSite;
 
     public Sites() {
     }
@@ -38,17 +40,6 @@ public class Sites {
     public Sites(String title, String address) {
         this.title = title;
         this.address = address;
-    }
-
-    public Sites(String title, String address, String languaje, ArrayList<String> listTags, String header, String body, String footer, String summary) {
-        this.title = title;
-        this.address = address;
-        this.languaje = languaje;
-        this.listTags = listTags;
-        this.header = header;
-        this.body = body;
-        this.footer = footer;
-        this.summary = summary;
     }
     
     public void registerSite(Connection conn){
@@ -171,4 +162,12 @@ public class Sites {
     public void setListTokensMatches(ArrayList<Token> listTokensMatches) {
         this.listTokensMatches = listTokensMatches;
     }        
+
+    public BigInteger getTimeTotalMatchPerSite() {
+        return timeTotalMatchPerSite;
+    }
+
+    public void setTimeTotalMatchPerSite(BigInteger timeTotalMatchPerSite) {
+        this.timeTotalMatchPerSite = timeTotalMatchPerSite;
+    }
 }

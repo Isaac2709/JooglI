@@ -10,7 +10,6 @@ import database.DBConnection;
 import java.sql.Connection;
 import models.Sites;
 import multicore.ParallelTasks;
-import org.jsoup.Jsoup;
 
 /**
  *
