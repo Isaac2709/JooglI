@@ -146,8 +146,8 @@ public class SitesView extends javax.swing.JFrame {
        
         Object []obj = new Object[2];
         //for(int i = 0; i < listSites.size(); i++){
-            obj[0] = null;
-            obj[1] = null;
+            obj[0] = "";
+            obj[1] = "";
             model.addRow(obj);
         //}
     }//GEN-LAST:event_jBtnAddActionPerformed
