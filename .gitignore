@@ -1,5 +1,3 @@
 /build/
 /dist/
-/nbproject/
-/branches/isaac_branch/nbproject/private/
-/branches/jeank_branch/nbproject/private/
+/nbproject/*
