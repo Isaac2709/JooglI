@@ -36,7 +36,7 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
     private Thread tempThreadBtnSearch;
     private Thread tempThreadTxtSearch;
     private boolean flag=false;    
-    private boolean implementsMultiCore = false;
+    private boolean implementsMultiCore =true;
     /**
      * Creates new form SearchEngineView
      */
@@ -277,13 +277,16 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
             
             javax.swing.JLabel jDescription = new javax.swing.JLabel();
             javax.swing.JLabel jMatches = new javax.swing.JLabel();
+            javax.swing.JLabel jTotalTimePerSite = new javax.swing.JLabel();
             
             javax.swing.JLabel jtimeFirstMatch = new javax.swing.JLabel();
+            
+            jTotalTimePerSite.setText("Tiempo total por pagina: "+listSites.get(i).getTimeTotalMatchPerSite().toString()+" milisegundos.");
             jDescription.setText(listSites.get(i).getBody());
             ArrayList<Token> listTokenMatches = listSites.get(i).getListTokensMatches();
             String matches = "";
             for(int n = 0; n < listTokenMatches.size(); n++){
-                matches = "<html><body>"+matches + listTokenMatches.get(n).getToken() + " aparecio " + listTokenMatches.get(n).getNumberMatches() + " veces; <br> Tiempo de primera coincidencia: "+ listTokenMatches.get(n).getFirstMatchTime()+" milisegundos. <br> Tiempo total: "+listTokenMatches.get(n).getTotalMachTime()+" milisegundos.<br><html><body>";
+                matches = "<html><body>"+matches + listTokenMatches.get(n).getToken() + " aparecio " + listTokenMatches.get(n).getNumberMatches() + " veces; <br> Tiempo de primera coincidencia: "+ listTokenMatches.get(n).getFirstMatchTime()+" milisegundos. <br> Tiempo total del token: "+listTokenMatches.get(n).getTotalMachTime()+" milisegundos.<br><html><body>";
                 countForVerticalPanelSize++;
             }
             if(!verificarCount){
@@ -305,6 +308,7 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
                     .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jMatches)
                         .addComponent(jDescription)
+                        .addComponent(jTotalTimePerSite)
                     )
                 )
             );
@@ -314,6 +318,7 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
                     .addGap(10, 10, 10)
                     .addComponent(jMatches) 
                     .addComponent(jDescription)
+                    .addComponent(jTotalTimePerSite)
                 )
             );
             int boxSize=0;
@@ -326,7 +331,7 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
             jPanelResult.add(jPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, (i*(100+boxSize)), 480, boxSize+100));                        
         }  
         //searchJPanel.add(jTotalSequentialDuration.setText())
-        jTimeTotalDurationSequential.setText("Tiempo total secuencial: "+searchEngine.getTimeTotalSequential().toString()+" milisegundos.");
+        //jTimeTotalDurationSequential.setText("Tiempo total secuencial: "+searchEngine.getTimeTotalSequential().toString()+" milisegundos.");
         //searchJPanel.add(jTimeTotalDurationSequential);
         pack();       
     }
