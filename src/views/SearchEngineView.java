@@ -23,6 +23,7 @@ import javax.swing.border.Border;
 import models.SearchEngine;
 import models.Sites;
 import models.Token;
+import multicore.ParallelTasks;
 
 /**
  *
@@ -34,6 +35,7 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
     private Thread tempThreadBtnSearch;
     private Thread tempThreadTxtSearch;
     private boolean flag=false;    
+    private boolean implementsMultiCore = false;
     /**
      * Creates new form SearchEngineView
      */
@@ -219,31 +221,35 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
     }//GEN-LAST:event_jTxtSearchKeyPressed
 
     private void jBtnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnSearchActionPerformed
-        ArrayList<Sites> listSites = searchEngine.search(jTxtSearch2.getText());
-        System.out.println("******************************************");
-        searchEngine.printSites(listSites);
-        loadResults(listSites);
+        try {
+            search(jTxtSearch2.getText());
+        } catch (InterruptedException ex) {
+            Logger.getLogger(SearchEngineView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jBtnSearchActionPerformed
 
     private void jBtnSearch1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnSearch1ActionPerformed
-        ArrayList<Sites> listSites = searchEngine.search(jTxtSearch2.getText());
-        System.out.println("******************************************");
-        searchEngine.printSites(listSites);
-        loadResults(listSites);
+        try {
+            search(jTxtSearch2.getText());
+        } catch (InterruptedException ex) {
+            Logger.getLogger(SearchEngineView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jBtnSearch1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        /*ArrayList<Sites> listSites = searchEngine.search(jTxtSearch2.getText());
-        System.out.println("******************************************");
-        searchEngine.printSites(listSites);
-        loadResults(listSites); */       
+        try {
+            search(jTxtSearch2.getText());
+        } catch (InterruptedException ex) {
+            Logger.getLogger(SearchEngineView.class.getName()).log(Level.SEVERE, null, ex);
+        }   
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jTxtSearch2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTxtSearch2KeyPressed
-        ArrayList<Sites> listSites = searchEngine.search(jTxtSearch2.getText());
-        System.out.println("******************************************");
-        searchEngine.printSites(listSites);        
-        loadResults(listSites);        
+        try {
+            search(jTxtSearch2.getText());
+        } catch (InterruptedException ex) {
+            Logger.getLogger(SearchEngineView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jTxtSearch2KeyPressed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -251,7 +257,15 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
         this.setVisible(false);
         sitesView.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
-           
+    
+    
+    private void search(String strSearch) throws InterruptedException{        
+        ArrayList<Sites> listSites = searchEngine.search(strSearch, implementsMultiCore);
+        System.out.println("******************************************");
+        searchEngine.printSites(listSites);        
+        loadResults(listSites);            
+    }
+    
     private void loadResults(ArrayList<Sites> listSites){
         jPanelResult.removeAll();
         
