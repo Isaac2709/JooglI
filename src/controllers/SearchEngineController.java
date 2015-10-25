@@ -18,6 +18,7 @@ import java.sql.Connection;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
+import java.util.concurrent.RunnableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import models.SearchEngine;
@@ -34,6 +35,10 @@ public class SearchEngineController {
     private ArrayList<Sites> listSites;
     private static Connection conn;
     private static int index;
+    
+    public boolean matchingTitleG;
+    public BigInteger  timeFirstMatchPerSite,totalMatchTime;
+    
     private BigInteger timeTotalSequential;
     
     public SearchEngineController(){
@@ -138,6 +143,89 @@ public class SearchEngineController {
         return listMatching;
     }
     
+    private boolean searchTokenParallel(Sites webSiteToSearch, String strSearch){
+        StringTokenizer tokens = new StringTokenizer(strSearch);
+        ArrayList<Token> listTokensMatches = new ArrayList<Token>();
+        
+        
+        ParallelTasks task= new ParallelTasks();
+        long timeStart = System.currentTimeMillis();
+        while(tokens.hasMoreTokens()){
+         
+            task.add(new Runnable() {
+                
+                @Override
+                public void run() {
+                    try{
+                    long timeStartForToken = System.currentTimeMillis();
+                    boolean firstMatch=false;
+                    String token = tokens.nextToken();
+                    int numberMatches = 0;
+                    
+                    String textTitle = webSiteToSearch.getTitle().toLowerCase();
+                    for(int n = 0; n< textTitle.length(); n++){
+                        if(textTitle.charAt(n) == token.charAt(0)){
+                            int tempN = n; boolean match = true;
+                            for(int m = 0; m < token.length(); m++){
+                                if(textTitle.charAt(tempN) != token.charAt(m)){
+                                    match = false;
+                                    break;
+                                }
+                                tempN++;
+                            }
+                            if(match){
+                              numberMatches++;
+                              if(!firstMatch){
+                                firstMatch=true;
+                                timeFirstMatchPerSite=BigInteger.valueOf(System.currentTimeMillis());
+                                timeFirstMatchPerSite=timeFirstMatchPerSite.subtract(BigInteger.valueOf(timeStartForToken));
+                              }
+                            }
+                        }
+                    }
+                    if(numberMatches > 0){ // If found any match in the tittle, this will be prioritized
+                        matchingTitleG= true;
+                    }
+                    String textBody = webSiteToSearch.getBody().toLowerCase();
+                    for(int n = 0; n < textBody.length(); n++){
+                        if(textBody.charAt(n) == token.charAt(0)){
+                            int tempN = n; boolean match = true;
+                            for(int m = 0; m < token.length(); m++){
+                                if(textBody.charAt(tempN) != token.charAt(m)){
+                                    match = false;
+                                    break;
+                                }
+                                tempN++;
+                            }
+                            if(match){
+                                numberMatches++;
+                                if(!firstMatch){
+                                    firstMatch=true;
+                                    timeFirstMatchPerSite=BigInteger.valueOf(System.currentTimeMillis());
+                                    timeFirstMatchPerSite=timeFirstMatchPerSite.subtract(BigInteger.valueOf(timeStartForToken));
+                                }
+                            }
+                        }
+                    }
+                    if(numberMatches > 0){
+                        totalMatchTime=BigInteger.valueOf(System.currentTimeMillis());
+                        totalMatchTime=totalMatchTime.subtract(BigInteger.valueOf(timeStart));
+                        listTokensMatches.add(new Token(token, numberMatches, timeFirstMatchPerSite, totalMatchTime));
+                    }
+                }
+                    catch(Exception e){
+                    }
+                    
+                }
+            });
+        }
+        if(!listTokensMatches.isEmpty()){
+            webSiteToSearch.setListTokensMatches(listTokensMatches);
+        }
+        return matchingTitleG;
+        
+    }
+    
     private boolean searchByWebSite(Sites webSiteToSearch, String strSearch){
         boolean matchingTitle = false; boolean firstMatch=false;
         BigInteger  timeFirstMatchPerSite = BigInteger.valueOf(0); 
@@ -198,6 +286,11 @@ public class SearchEngineController {
                     }
                     if(match){
                         numberMatches++;
+                        if(!firstMatch){
+                                firstMatch=true;
+                                timeFirstMatchPerSite=BigInteger.valueOf(System.currentTimeMillis());
+                                timeFirstMatchPerSite=timeFirstMatchPerSite.subtract(BigInteger.valueOf(timeStartForToken));
+                              }
                     }
                 }
             }
