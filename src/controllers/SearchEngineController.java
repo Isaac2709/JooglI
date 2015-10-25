@@ -126,11 +126,12 @@ public class SearchEngineController {
                 timeTotalMatchPerSite=timeTotalMatchPerSite.subtract(BigInteger.valueOf(startTimeSite));
                 listSites.get(i).setTimeTotalMatchPerSite(timeTotalMatchPerSite);
             }
-            System.err.println(System.currentTimeMillis() - timeStart);            
+            System.err.println(System.currentTimeMillis() - timeStart);    
+            setTimeTotalSequential(BigInteger.valueOf(System.currentTimeMillis()));
+            setTimeTotalSequential(timeTotalSequential.subtract(BigInteger.valueOf(timeStart)));
         }
         
-        setTimeTotalSequential(BigInteger.valueOf(System.currentTimeMillis()));
-        setTimeTotalSequential(timeTotalSequential.subtract(BigInteger.valueOf(timeStart)));
+        
         ArrayList<Sites> listMatching = new ArrayList<>();
         listMatching.addAll(listMatchingTittles);
         listMatching.addAll(listMatchingBody);        
