@@ -65,6 +65,7 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
         jPanelResult = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jTimeTotalDurationSequential = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
         mainJPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTxtSearch = new javax.swing.JTextField();
@@ -100,6 +101,13 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
             }
         });
 
+        jButton3.setText("Change");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout searchJPanelLayout = new javax.swing.GroupLayout(searchJPanel);
         searchJPanel.setLayout(searchJPanelLayout);
         searchJPanelLayout.setHorizontalGroup(
@@ -116,8 +124,11 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, searchJPanelLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(searchJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTimeTotalDurationSequential, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING))))
+                            .addGroup(searchJPanelLayout.createSequentialGroup()
+                                .addComponent(jTimeTotalDurationSequential, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1))))
                 .addGap(29, 29, 29))
         );
         searchJPanelLayout.setVerticalGroup(
@@ -134,7 +145,9 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTimeTotalDurationSequential, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(searchJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jTimeTotalDurationSequential, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(63, Short.MAX_VALUE))
         );
 
@@ -256,6 +269,13 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
 //        this.setVisible(false);
 //        sitesView.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        if(implementsMultiCore)
+            this.implementsMultiCore = false;
+        else
+            this.implementsMultiCore = true;
+    }//GEN-LAST:event_jButton3ActionPerformed
     
     
     private void search(String strSearch) throws InterruptedException{        
@@ -443,6 +463,7 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
     private javax.swing.JButton jBtnSearch1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanelResult;
