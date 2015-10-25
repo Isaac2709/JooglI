@@ -59,29 +59,7 @@ public class SearchEngineController {
         if(implementsMultiCore){                
             index = 0;
             ParallelTasks tasks = new ParallelTasks();
-            /*final Runnable waitOneSecond = new Runnable() {
-                public void run()
-                {
-                    try
-                    {                        
-                        boolean matchingTitle = searchByWebSite(listSites.get(index), strSearch);
-                        if((listSites.get(index).getListTokensMatches()!=null) && (!listSites.get(index).getListTokensMatches().isEmpty())){
-                            if(matchingTitle){
-                                listMatchingTittles.add(listSites.get(index));
-                            }
-                            else{
-                                listMatchingBody.add(listSites.get(index));                
-                            }
-                        }
-                        matchingTitle = false;
-                        //Thread.sleep(1000);
-
-                    }
-                    catch (Exception e)//Interrupted
-                    {
-                    }
-                }
-            };*/
+            
             for(int i = 0; i < listSites.size(); i++){
                 //index = i;                
                 System.out.println("1Index " + index);
@@ -89,8 +67,9 @@ public class SearchEngineController {
                     public void run()
                     {
                         try
-                        {                             
-                            boolean matchingTitle = searchByWebSite(listSites.get(index), strSearch);
+                        {       
+                            long startTimeSite = System.currentTimeMillis();
+                            boolean matchingTitle = searchTokenParallel(listSites.get(index), strSearch);
                             if((listSites.get(index).getListTokensMatches()!=null) && (!listSites.get(index).getListTokensMatches().isEmpty())){
                                 if(matchingTitle){
                                     listMatchingTittles.add(listSites.get(index));
@@ -99,8 +78,13 @@ public class SearchEngineController {
                                     listMatchingBody.add(listSites.get(index));                
                                 }
                             }
+                            BigInteger timeTotalMatchPerSite2=BigInteger.valueOf(System.currentTimeMillis());
+                            timeTotalMatchPerSite2=timeTotalMatchPerSite2.subtract(BigInteger.valueOf(startTimeSite));
+                            listSites.get(index).setTimeTotalMatchPerSite(timeTotalMatchPerSite2);
                             matchingTitle = false;
                             index++;
+                            
+                            
                             //Thread.sleep(10);
 
                         }
@@ -143,23 +127,23 @@ public class SearchEngineController {
         return listMatching;
     }
     
-    private boolean searchTokenParallel(Sites webSiteToSearch, String strSearch){
+    private boolean searchTokenParallel(Sites webSiteToSearch, String strSearch) throws InterruptedException{
+        webSiteToSearch.setListTokensMatches(null);
         StringTokenizer tokens = new StringTokenizer(strSearch);
         ArrayList<Token> listTokensMatches = new ArrayList<Token>();
-        
-        
+        matchingTitleG=false;
+         
         ParallelTasks task= new ParallelTasks();
         long timeStart = System.currentTimeMillis();
         while(tokens.hasMoreTokens()){
          
-            task.add(new Runnable() {
-                
-                @Override
+            String token = tokens.nextToken();
+            task.add(new Runnable() { 
                 public void run() {
                     try{
                     long timeStartForToken = System.currentTimeMillis();
                     boolean firstMatch=false;
-                    String token = tokens.nextToken();
+                    
                     int numberMatches = 0;
                     
                     String textTitle = webSiteToSearch.getTitle().toLowerCase();
@@ -217,8 +201,14 @@ public class SearchEngineController {
                     }
                     
                 }
+                
             });
+            
         }
+        final long start = System.currentTimeMillis();
+        task.go();
+        System.out.println(System.currentTimeMillis() - start+" task");
+        
         if(!listTokensMatches.isEmpty()){
             webSiteToSearch.setListTokensMatches(listTokensMatches);
         }
