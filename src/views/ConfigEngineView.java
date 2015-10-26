@@ -16,6 +16,7 @@ public class ConfigEngineView extends javax.swing.JFrame {
      */
     public ConfigEngineView() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**

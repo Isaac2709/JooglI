@@ -48,8 +48,6 @@ public class StatisticsView extends javax.swing.JFrame {
         this.jBarTimeParallelPane.setVisible(false);
     }
 
-    
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -214,6 +212,8 @@ public class StatisticsView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMatchesSequentialGraphRadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMatchesSequentialGraphRadioBtnActionPerformed
+        jMatchesParallelRadioBtn.setSelected(false);
+        jTimeSequentialGraphicRadioBtn.setSelected(false);
         jBarMatchesSequentialGraphPane.setVisible(true);
         jMainPane.setLayer(jBarMatchesSequentialGraphPane, 0, 0);
         jBarGraphicPane.setVisible(false);
@@ -222,6 +222,8 @@ public class StatisticsView extends javax.swing.JFrame {
     }//GEN-LAST:event_jMatchesSequentialGraphRadioBtnActionPerformed
 
     private void jTimeSequentialGraphicRadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTimeSequentialGraphicRadioBtnActionPerformed
+        jMatchesSequentialGraphRadioBtn.setSelected(false);
+        jMatchesParallelRadioBtn.setSelected(false);
         jBarGraphicPane.setVisible(true);
         jMainPane.setLayer(jBarGraphicPane, 0, 0);
         jBarMatchesSequentialGraphPane.setVisible(false);
@@ -230,6 +232,8 @@ public class StatisticsView extends javax.swing.JFrame {
     }//GEN-LAST:event_jTimeSequentialGraphicRadioBtnActionPerformed
 
     private void jMatchesParallelRadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMatchesParallelRadioBtnActionPerformed
+        jTimeSequentialGraphicRadioBtn.setSelected(false);
+        jMatchesSequentialGraphRadioBtn.setSelected(false);
         jBarTimeParallelPane.setVisible(true);
         jMainPane.setLayer(jBarTimeParallelPane, 0, 0);
         jBarMatchesSequentialGraphPane.setVisible(false);

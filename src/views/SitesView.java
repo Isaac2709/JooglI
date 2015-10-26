@@ -26,7 +26,8 @@ public class SitesView extends javax.swing.JFrame {
     public SitesView(SearchEngineController searchEngine) {
         initComponents();  
         //listSelectionModel = jTable1.getSelectionModel();        
-        //jTable1.setModel(model);        
+        //jTable1.setModel(model);    
+        this.setLocationRelativeTo(null);
         this.searchEngine = searchEngine;
         //searchEngine.printSites(searchEngine.getListSites());
         loadTable();
