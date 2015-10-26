@@ -10,6 +10,8 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
@@ -21,10 +23,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
+import models.InfoSystem;
 import models.SearchEngine;
 import models.Sites;
 import models.Token;
 import multicore.ParallelTasks;
+import org.hyperic.sigar.SigarException;
 
 /**
  *
@@ -35,18 +39,23 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
     private Thread tempThreadLogo;
     private Thread tempThreadBtnSearch;
     private Thread tempThreadTxtSearch;
+    private Thread tempInfoSystem;
     private boolean flag=false;    
     private boolean implementsMultiCore =true;
+    private static final int threads = Runtime.getRuntime().availableProcessors();
+    private static models.InfoSystem infoSystem;
+    private int searchFlag = 3;
     /**
      * Creates new form SearchEngineView
      */
     public SearchEngineView(SearchEngineController searchEngine) {
         initComponents(); 
         this.searchEngine = searchEngine;
-        searchJPanel.setVisible(false);
+        searchJPanel.setVisible(false);        
+        infoSystem = new InfoSystem();        
         //searchEngine.consultSites();
         // Listen for changes in the text        
-    }
+    }            
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -66,6 +75,7 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
         jButton1 = new javax.swing.JButton();
         jTimeTotalDurationSequential = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
+        jProcessorLabel = new javax.swing.JLabel();
         mainJPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTxtSearch = new javax.swing.JTextField();
@@ -108,11 +118,13 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
             }
         });
 
+        jProcessorLabel.setText("Processors:");
+
         javax.swing.GroupLayout searchJPanelLayout = new javax.swing.GroupLayout(searchJPanel);
         searchJPanel.setLayout(searchJPanelLayout);
         searchJPanelLayout.setHorizontalGroup(
             searchJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, searchJPanelLayout.createSequentialGroup()
+            .addGroup(searchJPanelLayout.createSequentialGroup()
                 .addGroup(searchJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, searchJPanelLayout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -130,6 +142,9 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
                                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane1))))
                 .addGap(29, 29, 29))
+            .addGroup(searchJPanelLayout.createSequentialGroup()
+                .addComponent(jProcessorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 459, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         searchJPanelLayout.setVerticalGroup(
             searchJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -148,10 +163,12 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
                 .addGroup(searchJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jTimeTotalDurationSequential, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                .addComponent(jProcessorLabel)
+                .addContainerGap())
         );
 
-        getContentPane().add(searchJPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 480, 330));
+        getContentPane().add(searchJPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 480, 340));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 2, 36)); // NOI18N
         jLabel1.setText("JooglI");
@@ -221,10 +238,12 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
                 tempThreadLogo = new Thread(this);
                 tempThreadBtnSearch  = new Thread(this);
                 tempThreadTxtSearch  = new Thread(this);
+                tempInfoSystem  = new Thread(this);
                         
                 tempThreadLogo.start();
                 tempThreadBtnSearch.start();
                 tempThreadTxtSearch.start();
+                tempInfoSystem.start();
             }
             catch(Exception e){
                 System.err.println("ERROR EN HILOS");
@@ -372,6 +391,7 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
             }
             tempThreadLogo.sleep(animationSpeed);
         } 
+        searchFlag = searchFlag - 1;
         tempThreadLogo.stop();
     }
     
@@ -395,6 +415,7 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
             }            
             tempThreadTxtSearch.sleep(animationSpeed);
         }
+        searchFlag = searchFlag - 1;
         tempThreadTxtSearch.stop();
     }    
     
@@ -425,8 +446,23 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
         jTxtSearch2.setText(jTxtSearch.getText());
         jTxtSearch2.requestFocusInWindow();
         jTxtSearch2.setCaretPosition(jTxtSearch2.getText().length());
-        tempThreadBtnSearch.stop();    
-    }        
+        searchFlag = searchFlag - 1;
+        tempThreadBtnSearch.stop();            
+    } 
+    
+    private void loadInfoSystem() throws InterruptedException{
+        try {
+            boolean t = true;
+            while(searchFlag > 0){System.err.print("");}
+            while(t){
+                jProcessorLabel.setText("Processors: " + threads + " | Total CPU usage: " + infoSystem.getInfoCPU().getTotalUsageCPU());
+                Thread.sleep(500);
+            }
+            tempInfoSystem.stop();
+        } catch (SigarException ex) {
+            Logger.getLogger(SearchEngineView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     /**
      * @param args the command line arguments
@@ -472,6 +508,7 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanelResult;
+    private javax.swing.JLabel jProcessorLabel;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel jTimeTotalDurationSequential;
     private javax.swing.JTextField jTxtSearch;
@@ -505,6 +542,14 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
             try {
                 flag=true;
                 annimationButtonSearch();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(SearchEngineView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else if(ct == tempInfoSystem){
+             try {
+                flag=true;
+                loadInfoSystem();
             } catch (InterruptedException ex) {
                 Logger.getLogger(SearchEngineView.class.getName()).log(Level.SEVERE, null, ex);
             }
