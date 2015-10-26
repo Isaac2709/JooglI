@@ -39,6 +39,7 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
     private boolean implementsMultiCore =false;
     
     public static ArrayList<Sites> listSitesSequential=new ArrayList<Sites>();
+    public static ArrayList<Sites> listSitesParallel=new ArrayList<Sites>();
     /**
      * Creates new form SearchEngineView
      */
@@ -308,7 +309,12 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
         System.out.println("******************************************");
         searchEngine.printSites(listSites);        
         loadResults(listSites);  
-        this.listSitesSequential=listSites;
+        if(!this.implementsMultiCore){
+            this.listSitesSequential=listSites;
+        }
+        else{
+            this.listSitesParallel=listSites;
+        }
     }
   
     private void loadResults(ArrayList<Sites> listSites){
