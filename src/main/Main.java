@@ -35,7 +35,6 @@ public class Main {
         mainView.setVisible(true);
         //views.SitesView sitesView = new views.SitesView(searchEngine);
         //sitesView.setVisible(true);
-//        
 //        views.StatisticsView statisticsView = new views.StatisticsView(searchEngine);
 //        statisticsView.setVisible(true);
         //try{
