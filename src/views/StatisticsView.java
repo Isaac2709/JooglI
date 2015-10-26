@@ -6,6 +6,9 @@
 package views;
 
 import controllers.SearchEngineController;
+import java.util.ArrayList;
+import models.Token;
+import views.SearchEngineView;
 //import org.jfree.chart.axis.NumberAxis; 
 import org.jfree.chart.*;
 
@@ -33,16 +36,19 @@ import org.jfree.data.xy.XYSeriesCollection;
  */
 public class StatisticsView extends javax.swing.JFrame {
 
+    
     /**
      * Creates new form StatisticsView
      */
-    public StatisticsView(SearchEngineController searchEngine) {
+    public StatisticsView() {
         initComponents();
         this.setLocationRelativeTo(null);
         this.jLineGraphPane.setVisible(false);
         this.jBarGraphicPane.setVisible(false);
         this.jPieChartPane.setVisible(false);
     }
+
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -57,9 +63,11 @@ public class StatisticsView extends javax.swing.JFrame {
         jLineGraphPane = new javax.swing.JPanel();
         jBarGraphicPane = new javax.swing.JPanel();
         jPieChartPane = new javax.swing.JPanel();
-        jLineGraphRadioBtn = new javax.swing.JRadioButton();
-        jBarGraphicRadioBtn = new javax.swing.JRadioButton();
-        jPieChartRadioBtn = new javax.swing.JRadioButton();
+        jMatchesSequentialGraphRadioBtn = new javax.swing.JRadioButton();
+        jTimeSequentialGraphicRadioBtn = new javax.swing.JRadioButton();
+        jMatchesParallelRadioBtn = new javax.swing.JRadioButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(800, 600));
@@ -71,18 +79,18 @@ public class StatisticsView extends javax.swing.JFrame {
         jLineGraphPane.setLayout(jLineGraphPaneLayout);
         jLineGraphPaneLayout.setHorizontalGroup(
             jLineGraphPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 397, Short.MAX_VALUE)
+            .addGap(0, 375, Short.MAX_VALUE)
         );
         jLineGraphPaneLayout.setVerticalGroup(
             jLineGraphPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 360, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jBarGraphicPaneLayout = new javax.swing.GroupLayout(jBarGraphicPane);
         jBarGraphicPane.setLayout(jBarGraphicPaneLayout);
         jBarGraphicPaneLayout.setHorizontalGroup(
             jBarGraphicPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 387, Short.MAX_VALUE)
+            .addGap(0, 188, Short.MAX_VALUE)
         );
         jBarGraphicPaneLayout.setVerticalGroup(
             jBarGraphicPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -93,7 +101,7 @@ public class StatisticsView extends javax.swing.JFrame {
         jPieChartPane.setLayout(jPieChartPaneLayout);
         jPieChartPaneLayout.setHorizontalGroup(
             jPieChartPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 397, Short.MAX_VALUE)
+            .addGap(0, 476, Short.MAX_VALUE)
         );
         jPieChartPaneLayout.setVerticalGroup(
             jPieChartPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -109,8 +117,8 @@ public class StatisticsView extends javax.swing.JFrame {
                 .addComponent(jLineGraphPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jMainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jMainPaneLayout.createSequentialGroup()
-                    .addGap(10, 10, 10)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jMainPaneLayout.createSequentialGroup()
+                    .addContainerGap()
                     .addComponent(jBarGraphicPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addContainerGap()))
             .addGroup(jMainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -126,7 +134,7 @@ public class StatisticsView extends javax.swing.JFrame {
                 .addComponent(jLineGraphPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jMainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jMainPaneLayout.createSequentialGroup()
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jMainPaneLayout.createSequentialGroup()
                     .addGap(10, 10, 10)
                     .addComponent(jBarGraphicPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addContainerGap()))
@@ -140,26 +148,30 @@ public class StatisticsView extends javax.swing.JFrame {
         jMainPane.setLayer(jBarGraphicPane, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jMainPane.setLayer(jPieChartPane, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        jLineGraphRadioBtn.setText("Lineas");
-        jLineGraphRadioBtn.addActionListener(new java.awt.event.ActionListener() {
+        jMatchesSequentialGraphRadioBtn.setText("Coincidencia");
+        jMatchesSequentialGraphRadioBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jLineGraphRadioBtnActionPerformed(evt);
+                jMatchesSequentialGraphRadioBtnActionPerformed(evt);
             }
         });
 
-        jBarGraphicRadioBtn.setText("Barras");
-        jBarGraphicRadioBtn.addActionListener(new java.awt.event.ActionListener() {
+        jTimeSequentialGraphicRadioBtn.setText("Tiempo total por sitio");
+        jTimeSequentialGraphicRadioBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBarGraphicRadioBtnActionPerformed(evt);
+                jTimeSequentialGraphicRadioBtnActionPerformed(evt);
             }
         });
 
-        jPieChartRadioBtn.setText("Pastel");
-        jPieChartRadioBtn.addActionListener(new java.awt.event.ActionListener() {
+        jMatchesParallelRadioBtn.setText("Coincidencias");
+        jMatchesParallelRadioBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jPieChartRadioBtnActionPerformed(evt);
+                jMatchesParallelRadioBtnActionPerformed(evt);
             }
         });
+
+        jLabel1.setText("Graficos Secuenciales");
+
+        jLabel2.setText("Graficos Multinucleo");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -168,56 +180,62 @@ public class StatisticsView extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLineGraphRadioBtn)
-                    .addComponent(jBarGraphicRadioBtn)
-                    .addComponent(jPieChartRadioBtn))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
-                .addComponent(jMainPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jMatchesSequentialGraphRadioBtn)
+                    .addComponent(jTimeSequentialGraphicRadioBtn)
+                    .addComponent(jMatchesParallelRadioBtn)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addGap(18, 18, 18)
+                .addComponent(jMainPane))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jMainPane)
             .addGroup(layout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addComponent(jLineGraphRadioBtn)
+                .addGap(8, 8, 8)
+                .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jBarGraphicRadioBtn)
-                .addGap(12, 12, 12)
-                .addComponent(jPieChartRadioBtn)
-                .addContainerGap(243, Short.MAX_VALUE))
+                .addComponent(jMatchesSequentialGraphRadioBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTimeSequentialGraphicRadioBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jMatchesParallelRadioBtn)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jLineGraphRadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLineGraphRadioBtnActionPerformed
+    private void jMatchesSequentialGraphRadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMatchesSequentialGraphRadioBtnActionPerformed
         jLineGraphPane.setVisible(true);
         jMainPane.setLayer(jLineGraphPane, 0, 0);
         jBarGraphicPane.setVisible(false);
         jPieChartPane.setVisible(false);
         loadGraphic();
-    }//GEN-LAST:event_jLineGraphRadioBtnActionPerformed
+    }//GEN-LAST:event_jMatchesSequentialGraphRadioBtnActionPerformed
 
-    private void jBarGraphicRadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBarGraphicRadioBtnActionPerformed
+    private void jTimeSequentialGraphicRadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTimeSequentialGraphicRadioBtnActionPerformed
         jBarGraphicPane.setVisible(true);
         jMainPane.setLayer(jBarGraphicPane, 0, 0);
         jLineGraphPane.setVisible(false);
         jPieChartPane.setVisible(false);
         loadGraphic();
-    }//GEN-LAST:event_jBarGraphicRadioBtnActionPerformed
+    }//GEN-LAST:event_jTimeSequentialGraphicRadioBtnActionPerformed
 
-    private void jPieChartRadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPieChartRadioBtnActionPerformed
+    private void jMatchesParallelRadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMatchesParallelRadioBtnActionPerformed
         jPieChartPane.setVisible(true);
         jMainPane.setLayer(jPieChartPane, 0, 0);
         jLineGraphPane.setVisible(false);
         jBarGraphicPane.setVisible(false);
         loadGraphic();
-    }//GEN-LAST:event_jPieChartRadioBtnActionPerformed
+    }//GEN-LAST:event_jMatchesParallelRadioBtnActionPerformed
 
     private void loadGraphic(){
         ChartPanel panel;
         JFreeChart chart = null;
-        if(jLineGraphRadioBtn.isSelected()){
+        if(jMatchesSequentialGraphRadioBtn.isSelected()){
             XYSplineRenderer renderer = new XYSplineRenderer();
             XYSeriesCollection dataset = new XYSeriesCollection();
             
@@ -248,29 +266,19 @@ public class StatisticsView extends javax.swing.JFrame {
             chart.setTitle("Line graph");
             
         }
-        else if(jBarGraphicRadioBtn.isSelected()){
+        else if(jTimeSequentialGraphicRadioBtn.isSelected()){
             DefaultCategoryDataset data = new DefaultCategoryDataset();
-            String producto1 = "sopas";
-            String producto2 = "sopas";
-            
-            String dia1 = "Dia 1";
-            String dia2 = "Dia 2";
-            String dia3 = "Dia 3";
-            String dia4 = "Dia 4";
-            
-            data.addValue(18, producto1, dia1);
-            data.addValue(15, producto1, dia2);
-            data.addValue(14, producto1, dia3);
-            data.addValue(1, producto1, dia4);
-            
-            data.addValue(50, producto2, dia1);
-            data.addValue(45, producto2, dia2);
-            data.addValue(31, producto2, dia3);
-            data.addValue(10, producto2, dia4);
-            
-            chart = ChartFactory.createBarChart("Grafico de barras", 
-                    "Dia",
-                    "Cantidad", 
+            for(int i=0;i<SearchEngineView.listSitesSequential.size();i++){
+                
+                //data.addValue(totalmilis, palabra, sitio);
+                ArrayList<Token> listTokenMatch= SearchEngineView.listSitesSequential.get(i).getListTokensMatches();
+                for(int i2=0;i2<listTokenMatch.size();i2++){
+                    data.addValue(listTokenMatch.get(i2).getTotalMachTime(), listTokenMatch.get(i2).getToken(), SearchEngineView.listSitesSequential.get(i).getTitle());
+                }
+            }
+            chart = ChartFactory.createBarChart("Tiempo Total por PaginaWeb", 
+                    "Paginas",
+                    "Tiempo en milisegundos", 
                     data, 
                     PlotOrientation.HORIZONTAL, 
                     true, 
@@ -281,7 +289,7 @@ public class StatisticsView extends javax.swing.JFrame {
             CategoryPlot plot = (CategoryPlot) chart.getCategoryPlot();
             plot.setDomainGridlinesVisible(true);
         }
-        else if(jPieChartRadioBtn.isSelected()){
+        else if(jMatchesParallelRadioBtn.isSelected()){
             DefaultPieDataset data = new DefaultPieDataset();
             data.setValue("Categoria 1", 20);
             data.setValue("Categoria 2", 60);
@@ -295,15 +303,15 @@ public class StatisticsView extends javax.swing.JFrame {
     }
     
     private void rePaint(ChartPanel panel){
-        if(jLineGraphRadioBtn.isSelected()){
+        if(jMatchesSequentialGraphRadioBtn.isSelected()){
             jLineGraphPane.add(panel);
             jLineGraphPane.repaint();
         }
-        else if(jBarGraphicRadioBtn.isSelected()){
+        else if(jTimeSequentialGraphicRadioBtn.isSelected()){
             jBarGraphicPane.add(panel);
             jBarGraphicPane.repaint();
         }
-        else if(jPieChartRadioBtn.isSelected()){
+        else if(jMatchesParallelRadioBtn.isSelected()){
             jPieChartPane.add(panel);
             jPieChartPane.repaint();
         }
@@ -338,18 +346,20 @@ public class StatisticsView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new StatisticsView(null).setVisible(true);
+                new StatisticsView().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jBarGraphicPane;
-    private javax.swing.JRadioButton jBarGraphicRadioBtn;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jLineGraphPane;
-    private javax.swing.JRadioButton jLineGraphRadioBtn;
     private javax.swing.JLayeredPane jMainPane;
+    private javax.swing.JRadioButton jMatchesParallelRadioBtn;
+    private javax.swing.JRadioButton jMatchesSequentialGraphRadioBtn;
     private javax.swing.JPanel jPieChartPane;
-    private javax.swing.JRadioButton jPieChartRadioBtn;
+    private javax.swing.JRadioButton jTimeSequentialGraphicRadioBtn;
     // End of variables declaration//GEN-END:variables
 }
