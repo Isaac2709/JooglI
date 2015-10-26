@@ -15,7 +15,7 @@ public class InfoSystem {
     private static InfoCPUController infoCPU;
     private static InfoFileSystemController infoFileSystem;
     private static InfoMemoryController infoMemory;
-    private static InfoSOController infoSO;
+    private static InfoSOController infoSO;             
 
     public InfoSystem() {
         infoCPU = new InfoCPUController();                                                    
@@ -37,7 +37,7 @@ public class InfoSystem {
         } catch (SigarException e) {
             e.printStackTrace();
         }
-    }
+    }        
 
     public static InfoCPUController getInfoCPU() {
         return infoCPU;
