@@ -35,6 +35,11 @@ public class SearchEngineController {
     private ArrayList<Sites> listSites;
     private static Connection conn;
     private static int index;
+    private static int index2;
+    private static int semaphore = 1;
+    private static int fillCount = 0;
+    private static int emptyCount = 0;
+    private static boolean available = true;
     
     public boolean matchingTitleG;
     public BigInteger  timeFirstMatchPerSite,totalMatchTime;
@@ -67,25 +72,34 @@ public class SearchEngineController {
                     public void run()
                     {
                         try
-                        {       
+                        {                                                        
+                            while(!available){}                            
+                            available = false;                            
+                            if(semaphore>0){
+                                semaphore--;
+                            }
+                            else{
+                                while(semaphore<1){}                            
+                                semaphore--;
+                            }
+                            Sites webSite = listSites.get(index);
+                            index++;
+                            available = true;
+                            semaphore++;
                             long startTimeSite = System.currentTimeMillis();
-                            boolean matchingTitle = searchTokenParallel(listSites.get(index), strSearch);
-                            if((listSites.get(index).getListTokensMatches()!=null) && (!listSites.get(index).getListTokensMatches().isEmpty())){
+                            boolean matchingTitle = searchTokenParallel(webSite, strSearch);
+                            if((webSite.getListTokensMatches()!=null) && (!webSite.getListTokensMatches().isEmpty())){
                                 if(matchingTitle){
-                                    listMatchingTittles.add(listSites.get(index));
+                                    listMatchingTittles.add(webSite);
                                 }
                                 else{
-                                    listMatchingBody.add(listSites.get(index));                
+                                    listMatchingBody.add(webSite);                
                                 }
                             }
                             BigInteger timeTotalMatchPerSite2=BigInteger.valueOf(System.currentTimeMillis());
                             timeTotalMatchPerSite2=timeTotalMatchPerSite2.subtract(BigInteger.valueOf(startTimeSite));
-                            listSites.get(index).setTimeTotalMatchPerSite(timeTotalMatchPerSite2);
-                            matchingTitle = false;
-                            index++;
-                            
-                            
-                            //Thread.sleep(10);
+                            webSite.setTimeTotalMatchPerSite(timeTotalMatchPerSite2);
+                            matchingTitle = false;                            
 
                         }
                         catch (Exception e)//Interrupted
