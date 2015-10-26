@@ -17,6 +17,7 @@ public class ConfigEngineView extends javax.swing.JFrame {
     public ConfigEngineView() {
         initComponents();
         this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     /**

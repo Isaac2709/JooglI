@@ -6,12 +6,18 @@
 package views;
 
 import controllers.SearchEngineController;
+import database.DBConnection;
+import java.io.IOException;
+import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import models.Sites;
 
 /**
  *
@@ -20,6 +26,7 @@ import javax.swing.event.TableModelListener;
 public class SitesView extends javax.swing.JFrame {    
     SearchEngineController searchEngine;
     ListSelectionModel listSelectionModel;
+    private static int lenght;
     /**
      * Creates new form ConfigSitesView
      */
@@ -29,6 +36,8 @@ public class SitesView extends javax.swing.JFrame {
         //jTable1.setModel(model);    
         this.setLocationRelativeTo(null);
         this.searchEngine = searchEngine;
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        
         //searchEngine.printSites(searchEngine.getListSites());
         loadTable();
         
@@ -39,19 +48,54 @@ public class SitesView extends javax.swing.JFrame {
                 if(evt.getColumn()!=-1){
                     //model.getValueAt(evt.getFirstRow(), evt.getColumn());
                    if(model.getValueAt(evt.getFirstRow(), evt.getColumn())!= null){
-                        if(evt.getColumn() == 1){
-                            if( !(model.getValueAt(evt.getFirstRow(), evt.getColumn()).toString().equals("")) && !(model.getValueAt(evt.getFirstRow(), evt.getColumn() - 1).toString().equals("")) ){
-                                //UPDATE
-                                System.out.println("2");
+                       if(evt.getFirstRow()+1 > lenght){
+                            if(evt.getColumn() == 1){
+                                if( !(model.getValueAt(evt.getFirstRow(), evt.getColumn()).toString().equals("")) && !(model.getValueAt(evt.getFirstRow(), evt.getColumn() - 1).toString().equals("")) ){
+                                    String nameWEBSite = model.getValueAt(evt.getFirstRow(), evt.getColumn() - 1).toString();
+                                    String addressWEBSite = model.getValueAt(evt.getFirstRow(), evt.getColumn()).toString();                                
+                                    Sites site = new Sites(nameWEBSite, addressWEBSite);                                
+                                    if(site.existURL()){
+                                        if(site.registerSite(searchEngine.getConn())){
+                                            lenght ++;
+                                        }                                   
+                                    }                                
+                                }
+                                else if(!(model.getValueAt(evt.getFirstRow(), evt.getColumn()).toString().equals(""))){                                
+                                    String addressWEBSite = model.getValueAt(evt.getFirstRow(), evt.getColumn()).toString();                                
+                                    Sites site = new Sites("", addressWEBSite);                                
+                                    try {
+                                        String nameWEBSite = site.getTitleFromSource();
+                                        if(nameWEBSite != null){
+                                            site.setTitle(nameWEBSite);
+                                            if(site.existURL()){                                        
+                                                model.setValueAt(site.getTitle(),evt.getFirstRow(), evt.getColumn() - 1);
+                                                if(site.registerSite(searchEngine.getConn())){
+                                                    lenght ++;
+                                                }                                                
+                                            }
+                                        }
+                                        else{
+                                            model.setValueAt("", evt.getFirstRow(), evt.getColumn());
+                                        }
+                                    } catch (IOException ex) {
+                                        Logger.getLogger(SitesView.class.getName()).log(Level.SEVERE, null, ex);
+                                    }                                
+                                }
                             }
-                        }
-                        else if(evt.getColumn() == 0){
-                            if( !(model.getValueAt(evt.getFirstRow(), evt.getColumn()).toString().equals("")) && !(model.getValueAt(evt.getFirstRow(), evt.getColumn() + 1).toString().equals("")) ){
-                                System.out.println("2");
-                            }
+                            else if(evt.getColumn() == 0){
+                                if( !(model.getValueAt(evt.getFirstRow(), evt.getColumn()).toString().equals("")) && !(model.getValueAt(evt.getFirstRow(), evt.getColumn() + 1).toString().equals("")) ){
+                                    String nameWEBSite = model.getValueAt(evt.getFirstRow(), evt.getColumn()).toString();
+                                    String addressWEBSite = model.getValueAt(evt.getFirstRow(), evt.getColumn() + 1).toString();                                
+                                    Sites site = new Sites(nameWEBSite, addressWEBSite);                                
+                                    if(site.existURL()){
+                                        if(site.registerSite(searchEngine.getConn())){
+                                            lenght ++;
+                                        }                                    
+                                    }
+                                }
+                           }
                        }
-                   }
-                    //System.out.println(model.getValueAt(evt.getFirstRow(), evt.getColumn()) + " | Column: " + evt.getColumn()+" | Row: " + evt.getFirstRow() + " | Type: "+evt.getType());
+                   }                    
                 }                
             }
         });
@@ -59,6 +103,7 @@ public class SitesView extends javax.swing.JFrame {
     
     private void loadTable(){
         ArrayList<models.Sites> listSites = searchEngine.getListSites();
+        lenght = listSites.size();
         Object []obj = new Object[2];
         for(int i = 0; i < listSites.size(); i++){
             obj[0] = listSites.get(i).getTitle();
@@ -161,6 +206,12 @@ public class SitesView extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jBtnSaveActionPerformed
 
+    public void addRow(){
+        Object []obj = new Object[2];        
+        obj[0] = "";
+        obj[1] = "";
+        model.addRow(obj);
+    }
     /**
      * @param args the command line arguments
      */

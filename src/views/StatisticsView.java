@@ -46,6 +46,7 @@ public class StatisticsView extends javax.swing.JFrame {
         this.jBarMatchesSequentialGraphPane.setVisible(false);
         this.jBarGraphicPane.setVisible(false);
         this.jBarTimeParallelPane.setVisible(false);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     /**
