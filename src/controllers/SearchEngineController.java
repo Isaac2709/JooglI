@@ -97,6 +97,8 @@ public class SearchEngineController {
             final long start = System.currentTimeMillis();
             tasks.go();
             System.err.println(System.currentTimeMillis() - start);
+            setTimeTotalSequential(BigInteger.valueOf(System.currentTimeMillis()));
+            setTimeTotalSequential(timeTotalSequential.subtract(BigInteger.valueOf(timeStart)));
         }
         else{      
             System.err.println("UNI");
