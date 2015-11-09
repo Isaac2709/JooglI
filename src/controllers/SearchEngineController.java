@@ -17,6 +17,8 @@ import java.net.URLConnection;
 import java.sql.Connection;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.StringTokenizer;
 import java.util.concurrent.RunnableFuture;
 import java.util.regex.Matcher;
@@ -42,6 +44,7 @@ public class SearchEngineController {
     private static boolean available = true;
     
     public boolean matchingTitleG;
+    public String matchingText;
     public BigInteger  timeFirstMatchPerSite,totalMatchTime;
     
     private BigInteger timeTotalSequential;
@@ -89,6 +92,7 @@ public class SearchEngineController {
                             long startTimeSite = System.currentTimeMillis();
                             boolean matchingTitle = searchTokenParallel(webSite, strSearch);
                             if((webSite.getListTokensMatches()!=null) && (!webSite.getListTokensMatches().isEmpty())){
+                                webSite.setSummary(matchingText);
                                 if(matchingTitle){
                                     listMatchingTittles.add(webSite);
                                 }
@@ -99,8 +103,7 @@ public class SearchEngineController {
                             BigInteger timeTotalMatchPerSite2=BigInteger.valueOf(System.currentTimeMillis());
                             timeTotalMatchPerSite2=timeTotalMatchPerSite2.subtract(BigInteger.valueOf(startTimeSite));
                             webSite.setTimeTotalMatchPerSite(timeTotalMatchPerSite2);
-                            matchingTitle = false;                            
-
+                            matchingTitle = false;     
                         }
                         catch (Exception e)//Interrupted
                         {
@@ -120,6 +123,7 @@ public class SearchEngineController {
                 startTimeSite = System.currentTimeMillis();
                 boolean matchingTitle = searchByWebSite(listSites.get(i), strSearch);
                 if((listSites.get(i).getListTokensMatches()!=null) && (!listSites.get(i).getListTokensMatches().isEmpty())){
+                    listSites.get(i).setSummary(matchingText);
                     if(matchingTitle){
                         listMatchingTittles.add(listSites.get(i));
                     }
@@ -131,8 +135,11 @@ public class SearchEngineController {
                 timeTotalMatchPerSite=BigInteger.valueOf(System.currentTimeMillis());
                 timeTotalMatchPerSite=timeTotalMatchPerSite.subtract(BigInteger.valueOf(startTimeSite));
                 listSites.get(i).setTimeTotalMatchPerSite(timeTotalMatchPerSite);
-            }            
-        }
+            }  
+            
+        }    
+        orderSitesList(listMatchingTittles);
+        orderSitesList(listMatchingBody);
         System.err.println(System.currentTimeMillis() - timeStart);    
         setTimeTotalSequential(BigInteger.valueOf(System.currentTimeMillis()));
         setTimeTotalSequential(timeTotalSequential.subtract(BigInteger.valueOf(timeStart)));                
@@ -143,12 +150,24 @@ public class SearchEngineController {
         return listMatching;
     }
     
+     public static void orderSitesList(ArrayList<Sites> listSites){
+        //Sorting
+        Collections.sort(listSites, new Comparator<Sites>() {
+            @Override
+            public int compare(Sites site1, Sites site2)
+            {
+                return  Integer.compare(site1.getListTokensMatches().size(), site2.getListTokensMatches().size());
+                //return  site1.getTitle().compareTo(site2.getTitle());
+            }
+        }.reversed());         
+    }
+    
     private boolean searchTokenParallel(Sites webSiteToSearch, String strSearch) throws InterruptedException{
         webSiteToSearch.setListTokensMatches(null);
         StringTokenizer tokens = new StringTokenizer(strSearch);
         ArrayList<Token> listTokensMatches = new ArrayList<Token>();
         matchingTitleG=false;
-         
+        matchingText = "";
         ParallelTasks task= new ParallelTasks();
         long timeStart = System.currentTimeMillis();
         while(tokens.hasMoreTokens()){
@@ -174,12 +193,13 @@ public class SearchEngineController {
                                 tempN++;
                             }
                             if(match){
-                              numberMatches++;
-                              if(!firstMatch){
-                                firstMatch=true;
-                                timeFirstMatchPerSite=BigInteger.valueOf(System.currentTimeMillis());
-                                timeFirstMatchPerSite=timeFirstMatchPerSite.subtract(BigInteger.valueOf(timeStartForToken));
-                              }
+                                addMatchingText(n, textTitle);                               
+                                numberMatches++;
+                                if(!firstMatch){
+                                    firstMatch=true;
+                                    timeFirstMatchPerSite=BigInteger.valueOf(System.currentTimeMillis());
+                                    timeFirstMatchPerSite=timeFirstMatchPerSite.subtract(BigInteger.valueOf(timeStartForToken));
+                                }
                             }
                         }
                     }
@@ -198,6 +218,7 @@ public class SearchEngineController {
                                 tempN++;
                             }
                             if(match){
+                                addMatchingText(n, textBody);
                                 numberMatches++;
                                 if(!firstMatch){
                                     firstMatch=true;
@@ -242,6 +263,7 @@ public class SearchEngineController {
         int intMatch = 0;
         Token currentToken = null;
         long timeStart = System.currentTimeMillis();
+        matchingText = "";
         while(tokens.hasMoreTokens()){ 
             firstMatch=false;
             long timeStartForToken = System.currentTimeMillis();
@@ -253,14 +275,15 @@ public class SearchEngineController {
             for(int n = 0; n< textTitle.length(); n++){
                 if(textTitle.charAt(n) == token.charAt(0)){
                     int tempN = n; boolean match = true;
-                    for(int m = 0; m < token.length(); m++){
-                        if(textTitle.charAt(tempN) != token.charAt(m)){
+                    for(int m = 0; m < token.length(); m++){                        
+                        if(tempN >= textTitle.length() || textTitle.charAt(tempN) != token.charAt(m)){
                             match = false;
                             break;
                         }
                         tempN++;
                     }
                     if(match){
+                        addMatchingText(n, textTitle);
                         numberMatches++;
                         if(!firstMatch){
                             firstMatch=true;
@@ -284,13 +307,14 @@ public class SearchEngineController {
                 if(textBody.charAt(n) == token.charAt(0)){
                     int tempN = n; boolean match = true;
                     for(int m = 0; m < token.length(); m++){
-                        if(textBody.charAt(tempN) != token.charAt(m)){
+                        if(tempN >= textBody.length() || textBody.charAt(tempN) != token.charAt(m)){
                             match = false;
                             break;
                         }
                         tempN++;
                     }
                     if(match){
+                        addMatchingText(n, textBody);
                         numberMatches++;
                         if(!firstMatch){
                                 firstMatch=true;
@@ -314,6 +338,26 @@ public class SearchEngineController {
             webSiteToSearch.setListTokensMatches(listTokensMatches);
         }
         return matchingTitle;
+    }
+    
+    private void addMatchingText(int n, String text){
+        int maxLenght = text.length();
+            if(n+30 < maxLenght){
+                if(n>20){
+                    matchingText = matchingText + " ..."+text.substring(n-20, n+20);
+                }
+                else{
+                    matchingText = matchingText + text.substring(0, n+30);
+                }
+            }
+            else{
+                if(n>20){
+                    matchingText = matchingText + " ..."+text.substring(n-20, maxLenght);
+                }
+                else{
+                    matchingText = matchingText + text.substring(0, maxLenght);
+                }
+            } 
     }
     
     public void openWebSite(String webAdress){
