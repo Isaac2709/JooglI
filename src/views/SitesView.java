@@ -57,6 +57,7 @@ public class SitesView extends javax.swing.JFrame {
                                     if(site.existURL()){
                                         if(site.registerSite(searchEngine.getConn())){
                                             lenght ++;
+                                            searchEngine.consultSites();
                                         }                                   
                                     }                                
                                 }
@@ -70,6 +71,7 @@ public class SitesView extends javax.swing.JFrame {
                                             if(site.existURL()){                                        
                                                 model.setValueAt(site.getTitle(),evt.getFirstRow(), evt.getColumn() - 1);
                                                 if(site.registerSite(searchEngine.getConn())){
+                                                    searchEngine.consultSites();
                                                     lenght ++;
                                                 }                                                
                                             }
@@ -89,6 +91,7 @@ public class SitesView extends javax.swing.JFrame {
                                     Sites site = new Sites(nameWEBSite, addressWEBSite);                                
                                     if(site.existURL()){
                                         if(site.registerSite(searchEngine.getConn())){
+                                            searchEngine.consultSites();
                                             lenght ++;
                                         }                                    
                                     }
