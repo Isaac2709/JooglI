@@ -96,6 +96,34 @@ public class InfoCPUController {
             e.printStackTrace();
         }
     }
+    
+    public ArrayList getInfoCPU() {
+        ArrayList consumoCPU = new ArrayList<>();
+        sigar = new Sigar();
+        CpuInfo[] infos = null;
+        CpuPerc[] cpus = null;
+        try {
+            infos = sigar.getCpuInfoList();
+            cpus = sigar.getCpuPercList();
+        } catch (SigarException e) {
+            e.printStackTrace();
+        }
+        CpuInfo info = infos[0];
+        long tamanioCache = info.getCacheSize();                
+        for (int i = 0; i < cpus.length; i++){
+            consumoCPU.add(CpuPerc.format(cpus[i].getUser()));
+            //System.out.println("Consumo de CPU " + i + "\t"                    
+                   // + CpuPerc.format(cpus[i].getUser()));
+        }
+        try {
+            consumoCPU.add(CpuPerc.format(sigar.getCpuPerc().getUser()));
+            //ystem.out.println("Consumo total de CPU\t"
+                    //+ CpuPerc.format(sigar.getCpuPerc().getUser()));
+        } catch (SigarException e) {
+            e.printStackTrace();
+        }
+        return consumoCPU;
+    }
 
     public static Sigar getSigar() {
         return sigar;
