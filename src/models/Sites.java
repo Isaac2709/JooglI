@@ -147,7 +147,7 @@ public class Sites {
             return false;
         }
     }
-
+    
     public String getTitle() {
         return title;
     }
