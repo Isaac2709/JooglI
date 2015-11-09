@@ -5,8 +5,10 @@
  */
 package views;
 
+import controllers.InfoCPUController;
 import controllers.SearchEngineController;
 import java.util.ArrayList;
+import models.InfoSystem;
 import models.Token;
 import views.SearchEngineView;
 //import org.jfree.chart.axis.NumberAxis; 
@@ -35,7 +37,7 @@ import org.jfree.data.xy.XYSeriesCollection;
  * @author luigi
  */
 public class StatisticsView extends javax.swing.JFrame {
-
+    private InfoCPUController infoCPU;
     
     /**
      * Creates new form StatisticsView
@@ -46,6 +48,8 @@ public class StatisticsView extends javax.swing.JFrame {
         this.jBarMatchesSequentialGraphPane.setVisible(false);
         this.jBarGraphicPane.setVisible(false);
         this.jBarTimeParallelPane.setVisible(false);
+        this.jCoreStatistics.setVisible(false);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     /**
@@ -61,11 +65,14 @@ public class StatisticsView extends javax.swing.JFrame {
         jBarMatchesSequentialGraphPane = new javax.swing.JPanel();
         jBarGraphicPane = new javax.swing.JPanel();
         jBarTimeParallelPane = new javax.swing.JPanel();
+        jCoreStatistics = new javax.swing.JPanel();
         jMatchesSequentialGraphRadioBtn = new javax.swing.JRadioButton();
         jTimeSequentialGraphicRadioBtn = new javax.swing.JRadioButton();
         jMatchesParallelRadioBtn = new javax.swing.JRadioButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jCPURadioBtn = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(800, 600));
@@ -77,11 +84,11 @@ public class StatisticsView extends javax.swing.JFrame {
         jBarMatchesSequentialGraphPane.setLayout(jBarMatchesSequentialGraphPaneLayout);
         jBarMatchesSequentialGraphPaneLayout.setHorizontalGroup(
             jBarMatchesSequentialGraphPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 476, Short.MAX_VALUE)
+            .addGap(0, 456, Short.MAX_VALUE)
         );
         jBarMatchesSequentialGraphPaneLayout.setVerticalGroup(
             jBarMatchesSequentialGraphPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 360, Short.MAX_VALUE)
+            .addGap(0, 358, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jBarGraphicPaneLayout = new javax.swing.GroupLayout(jBarGraphicPane);
@@ -106,6 +113,17 @@ public class StatisticsView extends javax.swing.JFrame {
             .addGap(0, 336, Short.MAX_VALUE)
         );
 
+        javax.swing.GroupLayout jCoreStatisticsLayout = new javax.swing.GroupLayout(jCoreStatistics);
+        jCoreStatistics.setLayout(jCoreStatisticsLayout);
+        jCoreStatisticsLayout.setHorizontalGroup(
+            jCoreStatisticsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 476, Short.MAX_VALUE)
+        );
+        jCoreStatisticsLayout.setVerticalGroup(
+            jCoreStatisticsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 358, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout jMainPaneLayout = new javax.swing.GroupLayout(jMainPane);
         jMainPane.setLayout(jMainPaneLayout);
         jMainPaneLayout.setHorizontalGroup(
@@ -124,6 +142,11 @@ public class StatisticsView extends javax.swing.JFrame {
                     .addContainerGap()
                     .addComponent(jBarTimeParallelPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addContainerGap()))
+            .addGroup(jMainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jMainPaneLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jCoreStatistics, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addContainerGap()))
         );
         jMainPaneLayout.setVerticalGroup(
             jMainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -141,10 +164,16 @@ public class StatisticsView extends javax.swing.JFrame {
                     .addContainerGap()
                     .addComponent(jBarTimeParallelPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addContainerGap()))
+            .addGroup(jMainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jMainPaneLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jCoreStatistics, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addContainerGap()))
         );
         jMainPane.setLayer(jBarMatchesSequentialGraphPane, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jMainPane.setLayer(jBarGraphicPane, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jMainPane.setLayer(jBarTimeParallelPane, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jMainPane.setLayer(jCoreStatistics, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jMatchesSequentialGraphRadioBtn.setText("Coincidencias");
         jMatchesSequentialGraphRadioBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -171,6 +200,15 @@ public class StatisticsView extends javax.swing.JFrame {
 
         jLabel2.setText("Graficos Multinucleo");
 
+        jLabel3.setText("Informacin del sistema");
+
+        jCPURadioBtn.setText("Informacion del CPU");
+        jCPURadioBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCPURadioBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -183,7 +221,9 @@ public class StatisticsView extends javax.swing.JFrame {
                             .addComponent(jMatchesSequentialGraphRadioBtn)
                             .addComponent(jMatchesParallelRadioBtn)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel2))
+                            .addComponent(jLabel2)
+                            .addComponent(jCPURadioBtn)
+                            .addComponent(jLabel3))
                         .addGap(39, 39, 39))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
@@ -205,6 +245,10 @@ public class StatisticsView extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jMatchesParallelRadioBtn)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jCPURadioBtn)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -214,32 +258,54 @@ public class StatisticsView extends javax.swing.JFrame {
     private void jMatchesSequentialGraphRadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMatchesSequentialGraphRadioBtnActionPerformed
         jMatchesParallelRadioBtn.setSelected(false);
         jTimeSequentialGraphicRadioBtn.setSelected(false);
+        jCPURadioBtn.setSelected(false);
         jBarMatchesSequentialGraphPane.setVisible(true);
         jMainPane.setLayer(jBarMatchesSequentialGraphPane, 0, 0);
         jBarGraphicPane.setVisible(false);
         jBarTimeParallelPane.setVisible(false);
+        jCoreStatistics.setVisible(false);
         loadGraphic();
     }//GEN-LAST:event_jMatchesSequentialGraphRadioBtnActionPerformed
 
     private void jTimeSequentialGraphicRadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTimeSequentialGraphicRadioBtnActionPerformed
         jMatchesSequentialGraphRadioBtn.setSelected(false);
         jMatchesParallelRadioBtn.setSelected(false);
+        jCPURadioBtn.setSelected(false);
         jBarGraphicPane.setVisible(true);
         jMainPane.setLayer(jBarGraphicPane, 0, 0);
         jBarMatchesSequentialGraphPane.setVisible(false);
         jBarTimeParallelPane.setVisible(false);
+        jCoreStatistics.setVisible(false);
         loadGraphic();
     }//GEN-LAST:event_jTimeSequentialGraphicRadioBtnActionPerformed
 
     private void jMatchesParallelRadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMatchesParallelRadioBtnActionPerformed
         jTimeSequentialGraphicRadioBtn.setSelected(false);
         jMatchesSequentialGraphRadioBtn.setSelected(false);
+        jCPURadioBtn.setSelected(false);
         jBarTimeParallelPane.setVisible(true);
         jMainPane.setLayer(jBarTimeParallelPane, 0, 0);
         jBarMatchesSequentialGraphPane.setVisible(false);
         jBarGraphicPane.setVisible(false);
+        jCoreStatistics.setVisible(false);
         loadGraphic();
     }//GEN-LAST:event_jMatchesParallelRadioBtnActionPerformed
+
+    private void jCPURadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCPURadioBtnActionPerformed
+        jMatchesParallelRadioBtn.setSelected(false);
+        jTimeSequentialGraphicRadioBtn.setSelected(false);
+        jMatchesSequentialGraphRadioBtn.setSelected(false);               
+        jCoreStatistics.setVisible(true);
+        jMainPane.setLayer(jCoreStatistics, 0, 0);
+        jBarTimeParallelPane.setVisible(false);
+        jBarMatchesSequentialGraphPane.setVisible(false);
+        jBarGraphicPane.setVisible(false);
+        //InfoSystem infoSystem = new InfoSystem();   
+        //infoSystem.printInfo();
+        infoCPU = new controllers.InfoCPUController();
+        //infoCPU.imprimirInfoCPU();
+        loadGraphic();        
+    }//GEN-LAST:event_jCPURadioBtnActionPerformed
 
     private void loadGraphic(){
         ChartPanel panel;
@@ -314,6 +380,21 @@ public class StatisticsView extends javax.swing.JFrame {
             CategoryPlot plot = (CategoryPlot) chart.getCategoryPlot();
             plot.setDomainGridlinesVisible(true);
         }
+        else if(jCPURadioBtn.isSelected()){
+            DefaultPieDataset data = new DefaultPieDataset();
+            ArrayList consumoCPU = infoCPU.getInfoCPU();
+            for(int i = 0; i<consumoCPU.size() - 1; i++){
+                String consumo = consumoCPU.get(i).toString();
+                System.out.println("Consumo de CPU"+ (i + 1) +": " + Double.parseDouble(consumo.substring(0, consumo.length() - 2)));
+                data.setValue("CPU " + (i + 1), Double.parseDouble(consumo.substring(0, consumo.length() - 2)));
+            }
+            
+            /*data.setValue("Categoria 2", 10);
+            data.setValue("Categoria 3", 40);
+            data.setValue("Categoria 4", 60);*/
+            
+            chart = ChartFactory.createPieChart("Grafico De Consumo Por CPU", data, true, true, true);               
+        }
         panel = new ChartPanel(chart);
         panel.setBounds(5, 10, 410, 350);    
         rePaint(panel);
@@ -331,6 +412,10 @@ public class StatisticsView extends javax.swing.JFrame {
         else if(jMatchesParallelRadioBtn.isSelected()){
             jBarTimeParallelPane.add(panel);
             jBarTimeParallelPane.repaint();
+        }
+        else if(jCPURadioBtn.isSelected()){
+            jCoreStatistics.add(panel);
+            jCoreStatistics.repaint();
         }
     }
     /**
@@ -372,8 +457,11 @@ public class StatisticsView extends javax.swing.JFrame {
     private javax.swing.JPanel jBarGraphicPane;
     private javax.swing.JPanel jBarMatchesSequentialGraphPane;
     private javax.swing.JPanel jBarTimeParallelPane;
+    private javax.swing.JRadioButton jCPURadioBtn;
+    private javax.swing.JPanel jCoreStatistics;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLayeredPane jMainPane;
     private javax.swing.JRadioButton jMatchesParallelRadioBtn;
     private javax.swing.JRadioButton jMatchesSequentialGraphRadioBtn;

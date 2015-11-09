@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.sql.Connection;
@@ -42,7 +43,7 @@ public class Sites {
         this.address = address;
     }
     
-    public void registerSite(Connection conn){
+    public boolean registerSite(Connection conn){
         String sql_query;
         PreparedStatement ps;
         try{
@@ -53,8 +54,11 @@ public class Sites {
             ps.executeUpdate();
         }
         catch(SQLException e){
-            JOptionPane.showMessageDialog(null, "Error while trying to register a new web-site: " + e.getMessage());
+            //JOptionPane.showMessageDialog(null, "Error while trying to register a new web-site: " + e.getMessage());
+            System.out.print("Error while trying to register a new web-site: " + e.getMessage());
+            return false;
         }
+        return true;
     }
     
     public ArrayList<Sites> consultSites(Connection conn){
@@ -90,7 +94,60 @@ public class Sites {
         in.close();
         return contenido;
     }
+    
+    public String obtenerCodigoFuente()
+    {
+        URL urlpagina = null;
+        InputStreamReader isr = null;
+        BufferedReader br = null;
+        String linea;
+        StringBuffer buffer = new StringBuffer();
 
+        try {
+            urlpagina = new URL(this.address);
+            isr = new InputStreamReader(urlpagina.openStream());
+            br = new BufferedReader(isr);
+            while ((linea = br.readLine()) != null){
+                buffer.append(linea);
+            }
+            br.close();
+            isr.close();
+        } catch (MalformedURLException e) {
+            JOptionPane.showMessageDialog(null, "Error en la url, ejemplo http://www.ejemplo.com");
+            return null;
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error al leer el archivo");
+            return null;
+        }
+        return buffer.toString();
+    }
+    
+    public String getTitleFromSource() throws IOException {
+        String content = obtenerCodigoFuente();
+        if(content == null){
+            return null;
+        }
+        String title="";                     
+        
+        int indexStart = content.indexOf ("<title>");
+        int indexEnd = content.indexOf ("</title>");
+        if (indexStart != -1 && indexEnd != -1){
+            title = content.substring(indexStart+7, indexEnd);        
+        }            
+        return title;
+    }
+    
+    public boolean existURL(){
+        URL url = null;
+        try {
+            url = new URL(this.address);
+            return true;
+        } 
+        catch (MalformedURLException e) {                     
+            return false;
+        }
+    }
+    
     public String getTitle() {
         return title;
     }
