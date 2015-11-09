@@ -365,7 +365,7 @@ public class SearchEngineView extends javax.swing.JFrame implements Runnable{
             });
             
             jTotalTimePerSite.setText("Tiempo total por pagina: "+listSites.get(i).getTimeTotalMatchPerSite().toString()+" milisegundos.");
-            jDescription.setText(listSites.get(i).getBody());
+            jDescription.setText(listSites.get(i).getSummary());
             ArrayList<Token> listTokenMatches = listSites.get(i).getListTokensMatches();
             String matches = "";
             for(int n = 0; n < listTokenMatches.size(); n++){

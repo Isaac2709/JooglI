@@ -5,8 +5,10 @@
  */
 package views;
 
+import controllers.InfoCPUController;
 import controllers.SearchEngineController;
 import java.util.ArrayList;
+import models.InfoSystem;
 import models.Token;
 import views.SearchEngineView;
 //import org.jfree.chart.axis.NumberAxis; 
@@ -35,7 +37,7 @@ import org.jfree.data.xy.XYSeriesCollection;
  * @author luigi
  */
 public class StatisticsView extends javax.swing.JFrame {
-
+    private InfoCPUController infoCPU;
     
     /**
      * Creates new form StatisticsView
@@ -46,6 +48,7 @@ public class StatisticsView extends javax.swing.JFrame {
         this.jBarMatchesSequentialGraphPane.setVisible(false);
         this.jBarGraphicPane.setVisible(false);
         this.jBarTimeParallelPane.setVisible(false);
+        this.jCoreStatistics.setVisible(false);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
@@ -260,6 +263,7 @@ public class StatisticsView extends javax.swing.JFrame {
         jMainPane.setLayer(jBarMatchesSequentialGraphPane, 0, 0);
         jBarGraphicPane.setVisible(false);
         jBarTimeParallelPane.setVisible(false);
+        jCoreStatistics.setVisible(false);
         loadGraphic();
     }//GEN-LAST:event_jMatchesSequentialGraphRadioBtnActionPerformed
 
@@ -271,6 +275,7 @@ public class StatisticsView extends javax.swing.JFrame {
         jMainPane.setLayer(jBarGraphicPane, 0, 0);
         jBarMatchesSequentialGraphPane.setVisible(false);
         jBarTimeParallelPane.setVisible(false);
+        jCoreStatistics.setVisible(false);
         loadGraphic();
     }//GEN-LAST:event_jTimeSequentialGraphicRadioBtnActionPerformed
 
@@ -282,18 +287,24 @@ public class StatisticsView extends javax.swing.JFrame {
         jMainPane.setLayer(jBarTimeParallelPane, 0, 0);
         jBarMatchesSequentialGraphPane.setVisible(false);
         jBarGraphicPane.setVisible(false);
+        jCoreStatistics.setVisible(false);
         loadGraphic();
     }//GEN-LAST:event_jMatchesParallelRadioBtnActionPerformed
 
     private void jCPURadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCPURadioBtnActionPerformed
         jMatchesParallelRadioBtn.setSelected(false);
         jTimeSequentialGraphicRadioBtn.setSelected(false);
-        jMatchesSequentialGraphRadioBtn.setSelected(false);
-        jBarTimeParallelPane.setVisible(true);
-        jMainPane.setLayer(jBarTimeParallelPane, 0, 0);
+        jMatchesSequentialGraphRadioBtn.setSelected(false);               
+        jCoreStatistics.setVisible(true);
+        jMainPane.setLayer(jCoreStatistics, 0, 0);
+        jBarTimeParallelPane.setVisible(false);
         jBarMatchesSequentialGraphPane.setVisible(false);
         jBarGraphicPane.setVisible(false);
-        loadGraphic();
+        //InfoSystem infoSystem = new InfoSystem();   
+        //infoSystem.printInfo();
+        infoCPU = new controllers.InfoCPUController();
+        //infoCPU.imprimirInfoCPU();
+        loadGraphic();        
     }//GEN-LAST:event_jCPURadioBtnActionPerformed
 
     private void loadGraphic(){
@@ -370,26 +381,19 @@ public class StatisticsView extends javax.swing.JFrame {
             plot.setDomainGridlinesVisible(true);
         }
         else if(jCPURadioBtn.isSelected()){
-            /*XYSplineRenderer renderer = new XYSplineRenderer();
-            XYSeriesCollection dataset = new XYSeriesCollection();
-            
-            ValueAxis x = new NumberAxis();
-            ValueAxis y = new NumberAxis();
-            XYSeries serie = new XYSeries("Data");
-            
-            XYPlot plot;
-            try{
-                for(int i = 0;i<10;i++){
-                    serie.add(null);
-                }
-                
-            }catch(Exception ex){
-                
+            DefaultPieDataset data = new DefaultPieDataset();
+            ArrayList consumoCPU = infoCPU.getInfoCPU();
+            for(int i = 0; i<consumoCPU.size() - 1; i++){
+                String consumo = consumoCPU.get(i).toString();
+                System.out.println("Consumo de CPU"+ (i + 1) +": " + Double.parseDouble(consumo.substring(0, consumo.length() - 2)));
+                data.setValue("CPU " + (i + 1), Double.parseDouble(consumo.substring(0, consumo.length() - 2)));
             }
-            dataset.addSeries(serie);
-            x.setLabel("x");
-            y.setLabel("y");
-            plot = new XYPlot(dataset, x, y, renderer);*/           
+            
+            /*data.setValue("Categoria 2", 10);
+            data.setValue("Categoria 3", 40);
+            data.setValue("Categoria 4", 60);*/
+            
+            chart = ChartFactory.createPieChart("Grafico De Consumo Por CPU", data, true, true, true);               
         }
         panel = new ChartPanel(chart);
         panel.setBounds(5, 10, 410, 350);    
@@ -408,6 +412,10 @@ public class StatisticsView extends javax.swing.JFrame {
         else if(jMatchesParallelRadioBtn.isSelected()){
             jBarTimeParallelPane.add(panel);
             jBarTimeParallelPane.repaint();
+        }
+        else if(jCPURadioBtn.isSelected()){
+            jCoreStatistics.add(panel);
+            jCoreStatistics.repaint();
         }
     }
     /**
